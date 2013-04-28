@@ -27,7 +27,7 @@ RenderSettings:
   m_SpotCookie: {fileID: 0}
   m_ObjectHideFlags: 0
 --- !u!127 &3
-LevelGameManager:
+GameManager:
   m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
@@ -190,6 +190,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acd91c38265cc4d6db4d874018f25df3, type: 3}
   m_Name: 
+  axiom: 123
 --- !u!1 &1734170028
 GameObject:
   m_ObjectHideFlags: 0
