@@ -26,6 +26,8 @@ public class PopulationDensity : MonoBehaviour {
 		case DensityFalloff.Exponential:
 			// FIXME: Implement.
 			return 1f;
+		default:
+			return 0f;
 		}
 	}
 }

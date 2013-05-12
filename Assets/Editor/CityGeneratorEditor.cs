@@ -14,7 +14,14 @@ public class CityGeneratorEditor : Editor {
 		generator.name = EditorGUILayout.TextField("Name:", generator.name);
 		generator.axiom = EditorGUILayout.TextField("Axiom:", generator.axiom);
 		
-		EditorGUILayout.LabelField("Extend me please!");
+		EditorGUILayout.LabelField("Number of productions: " + generator.NumberOfProductions);
+		
+		if (GUILayout.Button("Step")) {
+			generator.Step();
+		}
+		if (GUILayout.Button("Reset")) {
+			generator.Reset();
+		}
 		
 		if (GUI.changed) {
 			EditorUtility.SetDirty(target);

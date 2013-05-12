@@ -230,6 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50206d2266b12405d97364d55b0f2ac1, type: 3}
   m_Name: 
   radius: 800
+  densityAtCenter: 100
   densityFalloff: 0
 --- !u!1 &1734170028
 GameObject:
