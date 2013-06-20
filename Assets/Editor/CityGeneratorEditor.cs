@@ -12,9 +12,8 @@ public class CityGeneratorEditor : Editor {
 	
 	public override void OnInspectorGUI() {
 		generator.name = EditorGUILayout.TextField("Name:", generator.name);
-		generator.axiom = EditorGUILayout.TextField("Axiom:", generator.axiom);
 		
-		EditorGUILayout.LabelField("Number of productions: " + generator.NumberOfProductions);
+		EditorGUILayout.LabelField("Number of generations: " + generator.NumberOfGenerations);
 		
 		if (GUILayout.Button("Step")) {
 			generator.Step();

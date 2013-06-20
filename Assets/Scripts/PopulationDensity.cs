@@ -19,7 +19,8 @@ public class PopulationDensity : MonoBehaviour {
 	public float DensityAt(Vector3 worldPosition) {
 		switch (densityFalloff) {
 		case DensityFalloff.Linear:
-			return Mathf.Clamp((transform.InverseTransformPoint(worldPosition) - transform.position).magnitude / radius, 0f, 1f) * densityAtCenter;
+			return Mathf.Clamp((transform.InverseTransformPoint(worldPosition) - transform.position).magnitude / radius, 0f, 1f) *
+				densityAtCenter;
 		case DensityFalloff.Quadratic:
 			// FIXME: Implement.
 			return 1f;

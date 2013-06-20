@@ -1,14 +1,14 @@
 using UnityEngine;
 using System.Text;
 using System.Collections;
+using System.Collections.Generic;
 
 [ExecuteInEditMode]
 public class CityGenerator : MonoBehaviour {
-	public string axiom;
-	private string currentProduction;
-	public int NumberOfProductions { get; private set; }
+	public int NumberOfGenerations { get; private set; }
 	
-	public MapNode streetGraph;
+	private List<Atom> currentGeneration = new List<Atom>();
+	private MapNode streetGraph;
 	
 	void Start() {
 		Reset();
@@ -26,20 +26,20 @@ public class CityGenerator : MonoBehaviour {
 	/// Runs a one-step production of the underlying L-system.
 	/// </summary>
 	public void Step() {
-		StringBuilder stringBuilder = new StringBuilder(currentProduction);
-		
-		for (int i = 0; i < currentProduction.Length; i++) {
-			char atom = currentProduction[i];
-//			stringBuilder.Append(Produce(atom, i));
+		// Go through atoms in the current generation and produce them all
+		List<Atom> nextGeneration = new List<Atom>();
+		foreach (Atom atom in currentGeneration) {
+			nextGeneration.AddRange(atom.Produce());
 		}
 		
-		currentProduction = stringBuilder.ToString();
-		NumberOfProductions++;
+		currentGeneration = nextGeneration;
+		
+		NumberOfGenerations++;
 	}
 	
 	public void Reset() {
-		currentProduction = null;
+		if (currentGeneration == null || currentGeneration.Count > 0) currentGeneration = new List<Atom>();
 		streetGraph = new MapNode();
-		NumberOfProductions = 0;
+		NumberOfGenerations = 0;
 	}
 }
