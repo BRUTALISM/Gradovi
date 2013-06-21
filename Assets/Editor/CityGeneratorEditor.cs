@@ -13,10 +13,11 @@ public class CityGeneratorEditor : Editor {
 	public override void OnInspectorGUI() {
 		generator.name = EditorGUILayout.TextField("Name:", generator.name);
 		
-		EditorGUILayout.LabelField("Number of generations: " + generator.NumberOfGenerations);
+		EditorGUILayout.LabelField("Number of generations: " + generator.targetGenerations);
 		
 		if (GUILayout.Button("Step")) {
-			generator.Step();
+			generator.targetGenerations++;
+			generator.Produce();
 		}
 		if (GUILayout.Button("Reset")) {
 			generator.Reset();

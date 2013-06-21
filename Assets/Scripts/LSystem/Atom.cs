@@ -9,9 +9,7 @@ public abstract class Atom {
 	public Atom Left { get; set; }
 	public Atom Right { get; set; }
 	
-	// TODO: Da li mi ovo uopste treba?
-	public Atom Parent { get; set; }
-	public List<Atom> Children { get; set; }
+	public MapNode Node { get; set; }
 	
 	/// <summary>
 	/// Runs a production on this instance.
@@ -19,5 +17,5 @@ public abstract class Atom {
 	/// <returns>
 	/// A list of atoms for the next L-system generation.
 	/// </returns>
-	public abstract List<Atom> Produce();
+	public abstract List<Atom> Produce(Environment environment);
 }
