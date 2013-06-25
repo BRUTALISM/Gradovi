@@ -17,8 +17,7 @@ public class RoadAtom : Atom {
 	
 	public override List<Atom> Produce(Environment environment) {
 		// Create a new map node
-		MapNode spawn = new MapNode();
-		spawn.Position = Node.Position + forward * CalculateLength();
+		MapNode spawn = new MapNode(Node.Position + forward * CalculateLength());
 		
 		// Create a map edge between the current map node and the newly spawned node
 		new MapEdge(Node, spawn);
@@ -37,6 +36,6 @@ public class RoadAtom : Atom {
 	
 	private float CalculateLength() {
 		// FIXME: Implement.
-		return UnityEngine.Random.value * 100f;
+		return 50f + UnityEngine.Random.value * 100f;
 	}
 }

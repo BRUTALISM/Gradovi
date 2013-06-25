@@ -25,13 +25,14 @@ public class CityGenerator : MonoBehaviour {
 	/// <summary>
 	/// The root node of the street graph. This is the axiom's <c>Node</c> property.
 	/// </summary>
-	private MapNode rootNode;
+	public MapNode RootNode { get; private set; }
 	
 	// FIXME: Implement.
 	private Environment environment;
 	
 	void Start() {
-		
+		environment = new Environment();
+		environment.origin = transform.position;
 	}
 	
 	void Update() {
@@ -39,8 +40,12 @@ public class CityGenerator : MonoBehaviour {
 			// Play mode
 		} else {
 			// Edit mode
-			ProduceIfNecessary();
+			UpdateInEditMode();
 		}
+	}
+	
+	private void UpdateInEditMode() {
+		ProduceIfNecessary();
 	}
 	
 	/// <summary>
@@ -56,13 +61,21 @@ public class CityGenerator : MonoBehaviour {
 		currentGeneration = nextGeneration;
 		
 		actualGenerations++;
+		
+#if UNITY_EDITOR
+		RefillCachedData();
+#endif
 	}
 	
 	public void Reset() {
 		currentGeneration = null;
-		rootNode = null;
+		RootNode = null;
 		
 		targetGenerations = actualGenerations = 0;
+		
+#if UNITY_EDITOR
+		ClearCachedData();
+#endif
 	}
 	
 	private void ProduceIfNecessary() {
@@ -74,9 +87,10 @@ public class CityGenerator : MonoBehaviour {
 			// Add the axiom to the generation
 			// TODO: Add a configurable axiom
 			Atom axiom = new BranchAtom();
-			axiom.Node = new MapNode();
-			rootNode = axiom.Node;
+			axiom.Node = new MapNode(transform.position);
+			RootNode = axiom.Node;
 			currentGeneration.Add(axiom);
+			actualGenerations = 0;
 		}
 		
 		// Check if we need to produce the L-system
@@ -84,4 +98,51 @@ public class CityGenerator : MonoBehaviour {
 			Produce();
 		}
 	}
+	
+#if UNITY_EDITOR
+	// Cached data for drawing in the scene view
+	private HashSet<MapNode> intersections = new HashSet<MapNode>();
+	private HashSet<MapEdge> roads = new HashSet<MapEdge>();
+	
+	public void OnDrawGizmos() {
+		// Draw all roads
+		Gizmos.color = Color.red;
+		foreach (MapEdge road in roads) {
+			Gizmos.DrawLine(road.FromNode.Position, road.ToNode.Position);
+		}
+		
+		// Draw all intersections
+		Gizmos.color = Color.red;
+		foreach (MapNode intersection in intersections) {
+			Gizmos.DrawSphere(intersection.Position, 4f);
+		}
+	}
+	
+	private void RefillCachedData() {
+		intersections.Clear();
+		roads.Clear();
+		
+		// Do a flood fill of the city graph and cache all nodes and edges into local hashsets
+		Queue<MapNode> waitingNodes = new Queue<MapNode>();
+		waitingNodes.Enqueue(RootNode);
+		
+		while (waitingNodes.Count > 0) {
+			MapNode currentNode = waitingNodes.Dequeue();
+			foreach (MapEdge edge in currentNode.Edges) {
+				roads.Add(edge);
+				
+				MapNode oppositeNode = (currentNode == edge.FromNode ? edge.ToNode : edge.FromNode);
+				if (!intersections.Contains(oppositeNode)) {
+					waitingNodes.Enqueue(oppositeNode);
+					intersections.Add(oppositeNode);
+				}
+			}
+		}
+	}
+	
+	private void ClearCachedData() {
+		intersections.Clear();
+		roads.Clear();
+	}
+#endif
 }
