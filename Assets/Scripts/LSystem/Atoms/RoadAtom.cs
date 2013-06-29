@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RoadAtom : Atom {
 	/// <summary>
-	/// This property is used as a break flag. As soon as it goes below zero, the road atom stops producing roads.
+	/// This property is used as a break flag. As soon as it goes below zero, the road atom stops producing.
 	/// </summary>
 	// FIXME: Implement.
 	public float DelayCount { get; set; }
@@ -12,12 +12,12 @@ public class RoadAtom : Atom {
 	private Vector3 forward;
 	
 	public RoadAtom(Vector3 forward) {
-		this.forward = forward;
+		this.forward = forward.normalized;
 	}
 	
 	public override List<Atom> Produce(Environment environment) {
 		// Create a new map node
-		MapNode spawn = new MapNode(Node.Position + forward * CalculateLength());
+		MapNode spawn = new MapNode(Node.Position + forward * environment.Rule.CalculateRoadLength(this, environment));
 		
 		// Create a map edge between the current map node and the newly spawned node
 		new MapEdge(Node, spawn);
@@ -32,10 +32,5 @@ public class RoadAtom : Atom {
 		List<Atom> production = new List<Atom>();
 		production.Add(branch);
 		return production;
-	}
-	
-	private float CalculateLength() {
-		// FIXME: Implement.
-		return 50f + UnityEngine.Random.value * 100f;
 	}
 }

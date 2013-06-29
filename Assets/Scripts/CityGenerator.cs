@@ -3,6 +3,9 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// City generator.
+/// </summary>
 [ExecuteInEditMode]
 public class CityGenerator : MonoBehaviour {
 	/// <summary>
@@ -29,10 +32,14 @@ public class CityGenerator : MonoBehaviour {
 	
 	// FIXME: Implement.
 	private Environment environment;
-	
-	void Start() {
-		environment = new Environment();
-		environment.origin = transform.position;
+	public Environment Environment {
+		get {
+			if (environment == null) {
+				environment = new Environment();
+				environment.origin = transform.position;
+			}
+			return environment;
+		}
 	}
 	
 	void Update() {
@@ -55,7 +62,7 @@ public class CityGenerator : MonoBehaviour {
 		// Go through atoms in the current generation and produce them all
 		List<Atom> nextGeneration = new List<Atom>();
 		foreach (Atom atom in currentGeneration) {
-			nextGeneration.AddRange(atom.Produce(environment));
+			nextGeneration.AddRange(atom.Produce(Environment));
 		}
 		
 		currentGeneration = nextGeneration;
@@ -112,13 +119,13 @@ public class CityGenerator : MonoBehaviour {
 		}
 		
 		// Draw all intersections
-		Gizmos.color = Color.red;
 		foreach (MapNode intersection in intersections) {
 			Gizmos.DrawSphere(intersection.Position, 4f);
 		}
 	}
 	
 	private void RefillCachedData() {
+		// TODO: Very inefficient!
 		intersections.Clear();
 		roads.Clear();
 		
