@@ -22,4 +22,6 @@ public class Environment {
 //			}
 		}
 	}
+	
+	public PopulationDensity populationDensity;
 }

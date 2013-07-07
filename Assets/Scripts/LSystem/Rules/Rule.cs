@@ -13,18 +13,3 @@ public abstract class Rule {
 	
 	public abstract float CalculateRoadLength(RoadAtom currentAtom, Environment env);
 }
-
-// FIXME: Implement.
-//public class RoadParams {
-//	public RoadAtom Atom { get; set; }
-//	public Environment Environment { get; set; }
-//}
-//
-//public class RoadResult {}
-//
-//public class IntersectionParams {
-//	public BranchAtom Atom { get; set; }
-//	public Environment Environment { get; set; }
-//}
-//
-//public class IntersectionResult {}

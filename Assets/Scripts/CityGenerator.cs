@@ -37,6 +37,7 @@ public class CityGenerator : MonoBehaviour {
 			if (environment == null) {
 				environment = new Environment();
 				environment.origin = transform.position;
+				environment.populationDensity = GetComponent<PopulationDensity>();
 			}
 			return environment;
 		}
@@ -53,6 +54,8 @@ public class CityGenerator : MonoBehaviour {
 	
 	private void UpdateInEditMode() {
 		ProduceIfNecessary();
+		
+		// TODO: Check if the Y coordinate of the generator is 0, this has to be true at all times!
 	}
 	
 	/// <summary>
@@ -93,7 +96,7 @@ public class CityGenerator : MonoBehaviour {
 			
 			// Add the axiom to the generation
 			// TODO: Add a configurable axiom
-			Atom axiom = new BranchAtom();
+			Atom axiom = new BranchAtom(null);
 			axiom.Node = new MapNode(transform.position);
 			RootNode = axiom.Node;
 			currentGeneration.Add(axiom);
@@ -115,12 +118,12 @@ public class CityGenerator : MonoBehaviour {
 		// Draw all roads
 		Gizmos.color = Color.red;
 		foreach (MapEdge road in roads) {
-			Gizmos.DrawLine(road.FromNode.Position, road.ToNode.Position);
+			Gizmos.DrawLine(road.FromNode.position, road.ToNode.position);
 		}
 		
 		// Draw all intersections
 		foreach (MapNode intersection in intersections) {
-			Gizmos.DrawSphere(intersection.Position, 4f);
+			Gizmos.DrawSphere(intersection.position, 4f);
 		}
 	}
 	
@@ -135,7 +138,7 @@ public class CityGenerator : MonoBehaviour {
 		
 		while (waitingNodes.Count > 0) {
 			MapNode currentNode = waitingNodes.Dequeue();
-			foreach (MapEdge edge in currentNode.Edges) {
+			foreach (MapEdge edge in currentNode.edges) {
 				roads.Add(edge);
 				
 				MapNode oppositeNode = (currentNode == edge.FromNode ? edge.ToNode : edge.FromNode);

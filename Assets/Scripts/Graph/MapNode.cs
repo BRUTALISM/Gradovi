@@ -4,11 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MapNode {
-	public List<MapEdge> Edges;
-	public Vector3 Position;
+	public List<MapEdge> edges;
+	public Vector3 position;
 	
 	public MapNode(Vector3 position) {
-		Edges = new List<MapEdge>();
-		Position = position;
+		edges = new List<MapEdge>();
+		this.position = position;
 	}
 }

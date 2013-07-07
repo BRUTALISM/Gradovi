@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BranchAtom : Atom {
+	/// <summary>
+	/// The atom that created athis branch atom.
+	/// </summary>
+	// FIXME: Implement. Use this to find out the orientation of the road that created this instance.
+	public Atom Creator { get; set; }
+	
+	public BranchAtom(Atom creator) {
+		Creator = creator;
+	}
+	
 	public override List<Atom> Produce(Environment environment) {
 		List<Atom> production = new List<Atom>();
 		
