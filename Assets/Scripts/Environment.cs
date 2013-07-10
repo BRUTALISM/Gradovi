@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,6 +8,9 @@ using UnityEngine;
 /// </summary>
 public class Environment {
 	public Vector3 origin;
+	
+	private QuadTree<MapNode> mapNodeQuadTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
+	public QuadTree<MapNode> MapNodeQuadTree { get { return mapNodeQuadTree; } }
 	
 	/// <summary>
 	/// This property acts as a factory method for returning the correct <c>Rule</c> instance based on the current
@@ -24,4 +28,18 @@ public class Environment {
 	}
 	
 	public PopulationDensity populationDensity;
+	
+	public void AddMapNode(MapNode node) {
+		mapNodeQuadTree = mapNodeQuadTree.Add(node);
+	}
+	
+	public List<MapNode> GetNeighbours(MapNode node, float radius) {
+		// FIXME: Implement.
+		return new List<MapNode>();
+	}
+	
+	public void Clear() {
+		mapNodeQuadTree.Clear();
+		mapNodeQuadTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
+	}
 }

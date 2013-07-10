@@ -113,6 +113,7 @@ public class CityGenerator : MonoBehaviour {
 	// Cached data for drawing in the scene view
 	private HashSet<MapNode> intersections = new HashSet<MapNode>();
 	private HashSet<MapEdge> roads = new HashSet<MapEdge>();
+	private HashSet<QuadTree<MapNode>> quadTrees = new HashSet<QuadTree<MapNode>>();
 	
 	public void OnDrawGizmos() {
 		// Draw all roads
@@ -124,6 +125,15 @@ public class CityGenerator : MonoBehaviour {
 		// Draw all intersections
 		foreach (MapNode intersection in intersections) {
 			Gizmos.DrawSphere(intersection.position, 4f);
+		}
+		
+		// Draw quadtrees from the environment
+		Gizmos.color = Color.cyan;
+		foreach (QuadTree<MapNode> quadTree in quadTrees) {
+			Vector3 center = new Vector3(quadTree.CenterX, 0f, quadTree.CenterY);
+			Vector3 size = new Vector3(quadTree.MaximumX - quadTree.MinimumX, 1f,
+				quadTree.MaximumY - quadTree.MinimumY);
+			Gizmos.DrawWireCube(center, size);
 		}
 	}
 	
@@ -148,11 +158,28 @@ public class CityGenerator : MonoBehaviour {
 				}
 			}
 		}
+		
+		// Traverse the quad tree hierarchy and fill the hash set
+		Queue<QuadTree<MapNode>> traversalQueue = new Queue<QuadTree<MapNode>>();
+		traversalQueue.Enqueue(environment.MapNodeQuadTree);
+		quadTrees.Add(environment.MapNodeQuadTree);
+		while (traversalQueue.Count > 0) {
+			QuadTree<MapNode> tree = traversalQueue.Dequeue();
+			if (tree.SubtreesReadOnly != null) {
+				foreach (QuadTree<MapNode> subtree in tree.SubtreesReadOnly) {
+					traversalQueue.Enqueue(subtree);
+					quadTrees.Add(subtree);
+				}
+			}
+		}
 	}
 	
 	private void ClearCachedData() {
 		intersections.Clear();
 		roads.Clear();
+		quadTrees.Clear();
+		
+		Environment.Clear();
 	}
 #endif
 }

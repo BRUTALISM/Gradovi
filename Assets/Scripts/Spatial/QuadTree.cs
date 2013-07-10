@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using UnityEngine;
 
 /// <summary>
 /// The generic quad tree class. Its elements need to have a 2D coordinate representation. If the given maximum number
@@ -10,15 +12,20 @@ using System.Collections.Generic;
 /// </summary>
 public class QuadTree<T> where T : ICoordinate2D {
 	private float minimumX;
+	public float MinimumX { get { return minimumX; } }
 	private float maximumX;
+	public float MaximumX { get { return maximumX; } }
 	
 	private float minimumY;
+	public float MinimumY { get { return minimumY; } }
 	private float maximumY;
+	public float MaximumY { get { return maximumY; } }
 	
-	private float boundaryX;
-	private float boundaryY;
+	public float CenterX { get { return (minimumX + maximumX) / 2; } }
+	public float CenterY { get { return (minimumY + maximumY) / 2; } }
 	
 	private int maximumElements;
+	public int MaximumElements { get { return maximumElements; } }
 	
 	/// <summary>
 	/// The subtrees array. If the current instance has subtrees, it has exactly four of them. Each subtree has half
@@ -32,6 +39,14 @@ public class QuadTree<T> where T : ICoordinate2D {
 	private QuadTree<T>[] subtrees;
 	
 	/// <summary>
+	/// The subtrees as a read-only collection. Needed for inspection, such as for drawing gizmos in the Unity editor.
+	/// </summary>
+	private ReadOnlyCollection<QuadTree<T>> subtreesReadOnly;
+	public ReadOnlyCollection<QuadTree<T>> SubtreesReadOnly {
+		get { return subtreesReadOnly; }
+	}
+	
+	/// <summary>
 	/// The elements contained in this quadtree. If the current instance has subtrees, this field is null.
 	/// </summary>
 	private HashSet<T> elements;
@@ -40,25 +55,32 @@ public class QuadTree<T> where T : ICoordinate2D {
 	/// Initializes a new instance of the <see cref="QuadTree`1"/> class.
 	/// </summary>
 	/// <param name='minimumX'>Minimum x.</param>
-	/// <param name='minimumY'>Minimum y.</param>
 	/// <param name='maximumX'>Maximum x.</param>
+	/// <param name='minimumY'>Minimum y.</param>
 	/// <param name='maximumY'>Maximum y.</param>
 	/// <param name='maximumElements'>
 	/// The maximum number of elements this tree will hold before the next addition splits it into four subtrees.
 	/// </param>
-	public QuadTree(float minimumX, float minimumY, float maximumX, float maximumY, int maximumElements = 10) {
+	public QuadTree(float minimumX, float maximumX, float minimumY, float maximumY, int maximumElements = 10) {
 		this.minimumX = minimumX;
 		this.maximumX = maximumX;
 		
 		this.minimumY = minimumY;
 		this.maximumY = maximumY;
 		
-		this.boundaryX = (maximumX - minimumX) / 2;
-		this.boundaryY = (maximumY - minimumY) / 2;
-		
 		this.maximumElements = maximumElements;
 	}
 	
+	/// <summary>
+	/// Adds the specified element to the quad tree. If the element is outside of the quad tree's bounds, this method
+	/// creates a new parent quad tree, sets the current tree as one of its subtrees, and returns the parent.
+	/// If the element was inside the quad tree's bounds, the tree itself is returned, to make client code easier. A
+	/// typical invocation should look like:
+	/// <code>myQuadTree = myQuadTree.Add(someElement);</code>
+	/// </summary>
+	/// <param name='element'>
+	/// Element.
+	/// </param>
 	public QuadTree<T> Add(T element) {
 		if (BoundsCheck(element)) {
 			return CreateParent(element);
@@ -74,7 +96,23 @@ public class QuadTree<T> where T : ICoordinate2D {
 			elements.Add(element);
 		}
 		
-		return null;
+		return this;
+	}
+	
+	/// <summary>
+	/// Clear this instance and all its subtrees.
+	/// </summary>
+	public void Clear() {
+		if (subtrees != null) foreach (QuadTree<T> subtree in subtrees) subtree.Clear();
+		if (elements != null) elements.Clear();
+		
+		subtrees = null;
+		elements = null;
+	}
+	
+	public override string ToString() {
+		return String.Format("QuadTree: X[{0}:{1}] Y[{2}:{3}] maxElements = {4}",
+			minimumX, maximumX, minimumY, maximumY, maximumElements);
 	}
 	
 	private bool BoundsCheck(T element) {
@@ -94,25 +132,21 @@ public class QuadTree<T> where T : ICoordinate2D {
 	}
 	
 	private void CreateSubtrees() {
-		float halfwayX = (maximumX - minimumX) / 2;
-		float halfwayY = (maximumY - minimumY) / 2;
-		
 		subtrees = new QuadTree<T>[4];
-		subtrees[0] = new QuadTree<T>(minimumX, minimumY, halfwayX, halfwayY, maximumElements);
-		subtrees[1] = new QuadTree<T>(halfwayX, minimumY, maximumX, halfwayY, maximumElements);
-		subtrees[2] = new QuadTree<T>(minimumX, halfwayY, halfwayX, maximumY, maximumElements);
-		subtrees[3] = new QuadTree<T>(halfwayX, halfwayY, maximumX, maximumY, maximumElements);
+		subtrees[0] = new QuadTree<T>(minimumX, CenterX, minimumY, CenterY, maximumElements);
+		subtrees[1] = new QuadTree<T>(CenterX, maximumX, minimumY, CenterY, maximumElements);
+		subtrees[2] = new QuadTree<T>(minimumX, CenterX, CenterY, maximumY, maximumElements);
+		subtrees[3] = new QuadTree<T>(CenterX, maximumX, CenterY, maximumY, maximumElements);
+		
+		subtreesReadOnly = new ReadOnlyCollection<QuadTree<T>>(new List<QuadTree<T>>(subtrees));
 	}
 	
 	private void SubtreeAdd(T element) {
-		float x = element.X;
-		float y = element.Y;
-		
-		if (x <= boundaryX) {
-			if (y <= boundaryY) subtrees[0].Add(element);
+		if (element.X <= CenterX) {
+			if (element.Y <= CenterY) subtrees[0].Add(element);
 			else subtrees[2].Add(element);
 		} else {
-			if (y <= boundaryY) subtrees[1].Add(element);
+			if (element.Y <= CenterY) subtrees[1].Add(element);
 			else subtrees[3].Add(element);
 		}
 	}
@@ -141,7 +175,7 @@ public class QuadTree<T> where T : ICoordinate2D {
 			maxY = maximumY + currentWidthY;
 		}
 		
-		QuadTree<T> parent = new QuadTree<T>(minX, minY, maxX, maxY, maximumElements);
+		QuadTree<T> parent = new QuadTree<T>(minX, maxX, minY, maxY, maximumElements);
 		parent.CreateSubtrees();
 		parent.subtrees[subtreeIndex] = this;
 		return parent;

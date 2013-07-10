@@ -25,6 +25,9 @@ public class RoadAtom : Atom {
 		// Create a map edge between the current map node and the newly spawned node
 		new MapEdge(Node, spawn);
 		
+		// Add the newly created map node to the environment
+		environment.AddMapNode(spawn);
+		
 		// TODO: Check if the newly generated edge intersects another edge, or is close to some existing branch.
 		
 		// For now, the road atom only summons a branch atom
