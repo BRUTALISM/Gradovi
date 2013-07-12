@@ -9,8 +9,8 @@ using UnityEngine;
 public class Environment {
 	public Vector3 origin;
 	
-	private QuadTree<MapNode> mapNodeQuadTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
-	public QuadTree<MapNode> MapNodeQuadTree { get { return mapNodeQuadTree; } }
+	private QuadTree<MapNode> mapNodeTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
+	public QuadTree<MapNode> MapNodeTree { get { return mapNodeTree; } }
 	
 	/// <summary>
 	/// This property acts as a factory method for returning the correct <c>Rule</c> instance based on the current
@@ -30,7 +30,7 @@ public class Environment {
 	public PopulationDensity populationDensity;
 	
 	public void AddMapNode(MapNode node) {
-		mapNodeQuadTree = mapNodeQuadTree.Add(node);
+		mapNodeTree = mapNodeTree.Add(node);
 	}
 	
 	public List<MapNode> GetNeighbours(MapNode node, float radius) {
@@ -39,7 +39,7 @@ public class Environment {
 	}
 	
 	public void Clear() {
-		mapNodeQuadTree.Clear();
-		mapNodeQuadTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
+		mapNodeTree.Clear();
+		mapNodeTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
 	}
 }

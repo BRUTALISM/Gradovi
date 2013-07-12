@@ -11,6 +11,8 @@ using UnityEngine;
 /// Check out http://en.wikipedia.org/wiki/Quadtree for more info.
 /// </summary>
 public class QuadTree<T> where T : ICoordinate2D {
+	#region Fields and properties
+	
 	private float minimumX;
 	public float MinimumX { get { return minimumX; } }
 	private float maximumX;
@@ -50,6 +52,10 @@ public class QuadTree<T> where T : ICoordinate2D {
 	/// The elements contained in this quadtree. If the current instance has subtrees, this field is null.
 	/// </summary>
 	private HashSet<T> elements;
+	
+	#endregion
+	
+	#region Public methods
 	
 	/// <summary>
 	/// Initializes a new instance of the <see cref="QuadTree`1"/> class.
@@ -110,10 +116,42 @@ public class QuadTree<T> where T : ICoordinate2D {
 		elements = null;
 	}
 	
+	/// <summary>
+	/// Gets the neighbours of the given element.
+	/// </summary>
+	/// <returns>
+	/// The neighbours.
+	/// </returns>
+	/// <param name='element'>
+	/// Element.
+	/// </param>
+	/// <param name='blockyRadius'>
+	/// The "radius" of the search around the given element. It's called blocky because the search is not performed
+	/// within a circle defined by the element's center and the given radius, but within the minimal square drawn around
+	/// that circle.
+	/// </param>
+	public List<T> GetNeighbours(T element, float blockyRadius) {
+		return GetNeighboursRecursive(element, blockyRadius, new List<T>());
+	}
+	
+	/// <summary>
+	/// Gets all elements, recurses into subtrees.
+	/// </summary>
+	/// <returns>
+	/// All elements contained within this tree, all its subtrees, all of its subtrees' subtrees, and so on.
+	/// </returns>
+	public List<T> GetAllElements() {
+		return GetAllElementsRecursive(new List<T>());
+	}
+	
 	public override string ToString() {
 		return String.Format("QuadTree: X[{0}:{1}] Y[{2}:{3}] maxElements = {4}",
 			minimumX, maximumX, minimumY, maximumY, maximumElements);
 	}
+	
+	#endregion
+	
+	#region Private methods
 	
 	private bool BoundsCheck(T element) {
 		float x = element.X;
@@ -157,10 +195,14 @@ public class QuadTree<T> where T : ICoordinate2D {
 		float currentWidthY = maximumY - minimumY;
 		int subtreeIndex = 0;
 		
+		//  y^
+		//   |2 3
+		//   |0 1
+		//   +--->x
 		if (element.X < minimumX) {
 			minX = minimumX - currentWidthX;
 			maxX = maximumX;
-			subtreeIndex |= 1;
+			subtreeIndex = 1;
 		} else {
 			minX = minimumX;
 			maxX = maximumX + currentWidthX;
@@ -180,4 +222,40 @@ public class QuadTree<T> where T : ICoordinate2D {
 		parent.subtrees[subtreeIndex] = this;
 		return parent;
 	}
+	
+	private List<T> GetAllElementsRecursive(List<T> elementsSoFar) {
+		if (elements != null) {
+			elementsSoFar.AddRange(elements);
+		} else foreach (QuadTree<T> subtree in subtrees) {
+			subtree.GetAllElementsRecursive(elementsSoFar);
+		}
+		
+		return elementsSoFar;
+	}
+	
+	private List<T> GetNeighboursRecursive(T element, float blockyRadius, List<T> neighboursSoFar) {
+		float leftBound = element.X - blockyRadius;
+		float rightBound = element.X + blockyRadius;
+		float bottomBound = element.Y - blockyRadius;
+		float topBound = element.Y + blockyRadius;
+		
+		// Check if there's any part of the search square that intersects this instance's region
+		// Note: It's easier to reason about the inverse condition - if the two regions are not overlapping.
+		bool notOverlapping = (leftBound < minimumX && rightBound < minimumX) ||
+			(leftBound > maximumX && rightBound > maximumX) ||
+			(bottomBound < minimumY && topBound < minimumY) ||
+			(bottomBound > maximumY && topBound > maximumY);
+		if (!notOverlapping) {
+			// They overlap, add all elements or recurse into subtrees
+			if (elements != null) {
+				neighboursSoFar.AddRange(elements);
+			} else foreach (QuadTree<T> subtree in subtrees) {
+				subtree.GetNeighboursRecursive(element, blockyRadius, neighboursSoFar);
+			}
+		}
+		
+		return neighboursSoFar;
+	}
+	
+	#endregion
 }

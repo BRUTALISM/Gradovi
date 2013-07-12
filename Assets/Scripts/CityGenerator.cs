@@ -161,8 +161,8 @@ public class CityGenerator : MonoBehaviour {
 		
 		// Traverse the quad tree hierarchy and fill the hash set
 		Queue<QuadTree<MapNode>> traversalQueue = new Queue<QuadTree<MapNode>>();
-		traversalQueue.Enqueue(environment.MapNodeQuadTree);
-		quadTrees.Add(environment.MapNodeQuadTree);
+		traversalQueue.Enqueue(environment.MapNodeTree);
+		quadTrees.Add(environment.MapNodeTree);
 		while (traversalQueue.Count > 0) {
 			QuadTree<MapNode> tree = traversalQueue.Dequeue();
 			if (tree.SubtreesReadOnly != null) {
