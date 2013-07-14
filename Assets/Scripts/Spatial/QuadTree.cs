@@ -249,7 +249,7 @@ public class QuadTree<T> where T : ICoordinate2D {
 			// They overlap, add all elements or recurse into subtrees
 			if (elements != null) {
 				neighboursSoFar.AddRange(elements);
-			} else foreach (QuadTree<T> subtree in subtrees) {
+			} else if (subtrees != null) foreach (QuadTree<T> subtree in subtrees) {
 				subtree.GetNeighboursRecursive(element, blockyRadius, neighboursSoFar);
 			}
 		}

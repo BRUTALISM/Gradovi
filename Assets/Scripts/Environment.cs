@@ -7,6 +7,8 @@ using UnityEngine;
 /// population density, etc.
 /// </summary>
 public class Environment {
+	// TODO: Make this class serializable and customizable from the editor.
+	
 	public Vector3 origin;
 	
 	private QuadTree<MapNode> mapNodeTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
@@ -29,13 +31,19 @@ public class Environment {
 	
 	public PopulationDensity populationDensity;
 	
+	public float neighboursSearchRadius = 50f;
+	
+	/// <summary>
+	/// The distance between two nodes below which the nodes will be merged into one (while preserving edges).
+	/// </summary>
+	public float nodeMergingMaximumDistance = 20f;
+	
 	public void AddMapNode(MapNode node) {
 		mapNodeTree = mapNodeTree.Add(node);
 	}
 	
 	public List<MapNode> GetNeighbours(MapNode node, float radius) {
-		// FIXME: Implement.
-		return new List<MapNode>();
+		return mapNodeTree.GetNeighbours(node, radius);
 	}
 	
 	public void Clear() {

@@ -19,24 +19,42 @@ public class RoadAtom : Atom {
 	}
 	
 	public override List<Atom> Produce(Environment environment) {
+		List<Atom> production = new List<Atom>();
+		
 		// Create a new map node
 		MapNode spawn = new MapNode(Node.position + forward * environment.Rule.CalculateRoadLength(this, environment));
 		
-		// Create a map edge between the current map node and the newly spawned node
-		new MapEdge(Node, spawn);
+		// Fetch the spawned node's neighbours
+		List<MapNode> neighbours = environment.GetNeighbours(spawn, environment.neighboursSearchRadius);
+		bool mergedWithNeighbour = false;
+		foreach (MapNode neighbour in neighbours) {
+			// Check if the node is close to the neighbour so that they can be merged into one node
+			if (Vector3.Distance(spawn.position, neighbour.position) <= environment.nodeMergingMaximumDistance) {
+				// The spawned node will be merged with the neighbour, just create a new edge from the starting node
+				// to the neighbour and stop producing
+				new MapEdge(Node, neighbour);
+				mergedWithNeighbour = true;
+				break;
+			}
+		}
 		
-		// Add the newly created map node to the environment
-		environment.AddMapNode(spawn);
+		if (!mergedWithNeighbour) {
+			// Create a map edge between the current map node and the newly spawned node
+			new MapEdge(Node, spawn);
+			
+			// Add the newly created map node to the environment
+			environment.AddMapNode(spawn);
+			
+			// TODO: Check if the newly generated edge intersects another edge
+			
+			// For now, the road atom only summons a branch atom
+			Atom branch = new BranchAtom(this);
+			branch.Node = spawn;
+			
+			// Add the branch atom to the list of results and that's it
+			production.Add(branch);
+		}
 		
-		// TODO: Check if the newly generated edge intersects another edge, or is close to some existing branch.
-		
-		// For now, the road atom only summons a branch atom
-		Atom branch = new BranchAtom(this);
-		branch.Node = spawn;
-		
-		// Create the list of results and just add the branch atom to it
-		List<Atom> production = new List<Atom>();
-		production.Add(branch);
 		return production;
 	}
 }
