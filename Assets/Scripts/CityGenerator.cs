@@ -124,17 +124,18 @@ public class CityGenerator : MonoBehaviour {
 		
 		// Draw all intersections
 		foreach (MapNode intersection in intersections) {
-			Gizmos.DrawSphere(intersection.position, 4f);
+//			Gizmos.color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+			Gizmos.DrawSphere(intersection.position, 3f);
 		}
 		
 		// Draw quadtrees from the environment
-		Gizmos.color = Color.cyan;
-		foreach (QuadTree<MapNode> quadTree in quadTrees) {
-			Vector3 center = new Vector3(quadTree.CenterX, 0f, quadTree.CenterY);
-			Vector3 size = new Vector3(quadTree.MaximumX - quadTree.MinimumX, 1f,
-				quadTree.MaximumY - quadTree.MinimumY);
-			Gizmos.DrawWireCube(center, size);
-		}
+//		Gizmos.color = Color.cyan;
+//		foreach (QuadTree<MapNode> quadTree in quadTrees) {
+//			Vector3 center = new Vector3(quadTree.CenterX, 0f, quadTree.CenterY);
+//			Vector3 size = new Vector3(quadTree.MaximumX - quadTree.MinimumX, 1f,
+//				quadTree.MaximumY - quadTree.MinimumY);
+//			Gizmos.DrawWireCube(center, size);
+//		}
 	}
 	
 	private void RefillCachedData() {

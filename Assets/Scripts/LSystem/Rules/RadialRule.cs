@@ -83,7 +83,8 @@ public class RadialRule : Rule {
 
 	public override float CalculateRoadLength(RoadAtom currentAtom, Environment env) {
 		// FIXME: Implement.
-		return 10f + UnityEngine.Random.value * 10f + Vector3.Distance(env.origin, currentAtom.Node.position);
+		return Mathf.Min(20f + UnityEngine.Random.value * 10f + Vector3.Distance(env.origin, currentAtom.Node.position),
+			env.maximumRoadLength);
 	}
 	
 	private Vector3 AlignVector(Vector3 vec, Vector3 target) {

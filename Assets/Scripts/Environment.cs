@@ -31,12 +31,21 @@ public class Environment {
 	
 	public PopulationDensity populationDensity;
 	
+	/// <summary>
+	/// The radius within which a node has to be to be considered another node's neighbour.
+	/// </summary>
 	public float neighboursSearchRadius = 50f;
 	
 	/// <summary>
 	/// The distance between two nodes below which the nodes will be merged into one (while preserving edges).
 	/// </summary>
-	public float nodeMergingMaximumDistance = 20f;
+	public float nodeMergingMaximumDistance = 30f;
+	
+	/// <summary>
+	/// The maximum length of generated roads. Keep this value under <c>neighboursSearchRadius</c> if you want proper
+	/// road intersection detection.
+	/// </summary>
+	public float maximumRoadLength = 50f;
 	
 	public void AddMapNode(MapNode node) {
 		mapNodeTree = mapNodeTree.Add(node);

@@ -248,13 +248,22 @@ public class QuadTree<T> where T : ICoordinate2D {
 		if (!notOverlapping) {
 			// They overlap, add all elements or recurse into subtrees
 			if (elements != null) {
-				neighboursSoFar.AddRange(elements);
+				// Check if each node is within the radius and return only the ones that are
+				foreach (T node in elements) {
+					if (NodeWithinBounds(node, leftBound, rightBound, topBound, bottomBound)) {
+						neighboursSoFar.Add(node);
+					}
+				}
 			} else if (subtrees != null) foreach (QuadTree<T> subtree in subtrees) {
 				subtree.GetNeighboursRecursive(element, blockyRadius, neighboursSoFar);
 			}
 		}
 		
 		return neighboursSoFar;
+	}
+	
+	private bool NodeWithinBounds(T node, float left, float right, float top, float bottom) {
+		return node.X >= left && node.X <= right && node.Y >= bottom && node.Y <= top;
 	}
 	
 	#endregion
