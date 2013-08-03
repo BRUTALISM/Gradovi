@@ -74,20 +74,29 @@ public class RoadAtom : Atom {
 		// several intersections so we must find the one closest to the starting node (this.Node)
 		List<MapNode> intersectionNodes = null;
 		
+		// TODO: Sort neighbours based on distance from spawn and intersect from closest to farthest.
+		
 		// Iterate through all neighbours
 		foreach (MapNode neighbour in neighbours) {
 			foreach (MapEdge neighboursEdge in neighbour.edges) {
-				// Try to find an intersection
-				MapNode intersection = spawnedEdge.Intersection(neighboursEdge);
-				if (intersection != null) {
-					// We found an intersection, add it to the list
-					if (intersectionNodes == null) intersectionNodes = new List<MapNode>();
-					intersectionNodes.Add(intersection);
+				if (spawnedEdge.FromNode != neighboursEdge.FromNode &&
+					spawnedEdge.FromNode != neighboursEdge.ToNode &&
+					spawnedEdge.ToNode != neighboursEdge.FromNode &&
+					spawnedEdge.ToNode != neighboursEdge.ToNode) {
 					
-					// Also add the edge which generated the intersection to its edge list. Technically this is invalid
-					// behavior (since the intersection lies somewhere *on* that edge), but it's only temporarily there
-					// until we reconnect the nodes and edges properly in the next part of the algorithm.
-					intersection.edges.Add(neighboursEdge);
+					// Try to find an intersection
+					MapNode intersection = spawnedEdge.Intersection(neighboursEdge);
+					if (intersection != null) {
+						// We found an intersection, add it to the list
+						if (intersectionNodes == null) intersectionNodes = new List<MapNode>();
+						intersectionNodes.Add(intersection);
+						
+						// Also add the edge which generated the intersection to its edge list. Technically this is
+						// invalid behavior (since the intersection lies somewhere *on* that edge), but it's only
+						// temporarily there until we reconnect the nodes and edges properly in the next part of the
+						// algorithm.
+						intersection.edges.Add(neighboursEdge);
+					}
 				}
 			}
 		}

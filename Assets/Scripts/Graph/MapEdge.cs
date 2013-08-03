@@ -51,46 +51,39 @@ public class MapEdge {
 	/// A newly spawned MapNode if there was an intersection, or <c>null</c> otherwise.
 	/// </returns>
 	public MapNode Intersection(MapEdge other) {
-#warning Implement MapEdge.Intersection
-		return null;
-		
 		// Implementation of the intersection algorithm found at:
-		// http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
-		// (The C# solution is adapted from http://ideone.com/PnPJgb given in that answer.)
+		// http://britneyspeerpink.wordpress.com/2011/08/06/line-intersection/
 		
 		Vector2 p = this.FromNode.PositionAsVector2;
 		Vector2 r = this.ToNode.PositionAsVector2 - p;
 		Vector2 q = other.FromNode.PositionAsVector2;
 		Vector2 s = other.ToNode.PositionAsVector2 - q;
 		
-		Vector2 cmp = q - p;
+		Func<Vector2, Vector2, float> CrossMag = (v1, v2) => {
+			return v1.x * v2.y - v1.y * v2.x;
+		};
 		
-		float cmpxr = cmp.x * r.x - cmp.x * r.x;
-        float cmpxs = cmp.x * s.y - cmp.y * s.x;
-        float rxs = r.x * s.y - r.y * s.x;
+		float w = CrossMag(r, s);
 		
-		if (cmpxr == 0f) {
-			// Lines are collinear, and so intersect if they have any overlap
-			if (((other.FromNode.X - this.FromNode.X < 0f) != (other.FromNode.X - this.ToNode.X < 0f)) ||
-				((other.FromNode.Y - this.FromNode.Y < 0f) != (other.FromNode.Y - this.ToNode.Y < 0f))) {
-				Debug.LogWarning("Lines are collinear, what do I do? :/");
-				return null;
+		if (Mathf.Approximately(w, 0f)) return null;
+		else if (Mathf.Approximately(CrossMag(q - p, r), 0f)) return null;
+		else {
+			float t = CrossMag(q - p,s) / w;
+			Vector2 intersectionP = p + (t * r);
+			
+			// Check if the intersection lies within both line segments' bounds
+			Func<Vector2, Vector2, Vector2, bool> BoundsCheck = (intersection, p1, p2) => {
+				return Mathf.Min(p1.x, p2.x) <= intersection.x &&
+					Mathf.Max(p1.x, p2.x) >=  intersection.x &&
+					Mathf.Min(p1.y, p2.y) <= intersection.y &&
+					Mathf.Max(p1.y, p2.y) >= intersection.y;
+			};
+			
+			if (BoundsCheck(intersectionP, this.FromNode.PositionAsVector2, this.ToNode.PositionAsVector2) &&
+				BoundsCheck(intersectionP, other.FromNode.PositionAsVector2, other.ToNode.PositionAsVector2)) {
+				// Intersection found
+				return new MapNode(new Vector3(intersectionP.x, 0f, intersectionP.y));
 			}
-		}
-		
-		if (rxs == 0f) {
-			// Lines are parallel
-			return null;
-		}
-		
-		float rxsr = 1f / rxs;
-		float t = cmpxs * rxsr;
-		float u = cmpxr * rxsr;
-		
-		if ((t >= 0f) && (t <= 1f) && (u >= 0f) && (u <= 1f)) {
-			// Found it! Now calculate the actual position of the intersection
-			Vector2 intersection2D = p + r * t;
-			return new MapNode(new Vector3(intersection2D.x, 0f, intersection2D.y));
 		}
 		
 		return null;
