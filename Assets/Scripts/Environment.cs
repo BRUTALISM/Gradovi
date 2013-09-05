@@ -14,21 +14,6 @@ public class Environment {
 	private QuadTree<MapNode> mapNodeTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
 	public QuadTree<MapNode> MapNodeTree { get { return mapNodeTree; } }
 	
-	/// <summary>
-	/// This property acts as a factory method for returning the correct <c>Rule</c> instance based on the current
-	/// environmental conditions.
-	/// </summary>
-	public Rule Rule {
-		get {
-			// FIXME: Implement properly.
-//			if (/* nesto nesto == */ true) {
-				return RadialRule.Instance;
-//			} else {
-//				return null;
-//			}
-		}
-	}
-	
 	public PopulationDensity populationDensity;
 	
 	/// <summary>
@@ -58,5 +43,16 @@ public class Environment {
 	public void Clear() {
 		mapNodeTree.Clear();
 		mapNodeTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
+	}
+
+	/// <summary>
+	/// Gets the rule which should be used to continue producing the L-system at the given coordinates.
+	/// </summary>
+	/// <returns>The rule at given coordinates.</returns>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="z">The z coordinate.</param>
+	public Rule RuleAtCoordinates(float x, float z) {
+		if (Mathf.Sqrt(x * x + z * z) < 200f) return RectangularRule.Instance;
+		else return RadialRule.Instance;
 	}
 }

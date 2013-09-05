@@ -3,6 +3,8 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
+// TODO: Sack this class, prevezbavanje(tm).
+
 [CustomEditor(typeof(CityGenerator))]
 public class CityGeneratorEditor : Editor {
 	private CityGenerator generator;

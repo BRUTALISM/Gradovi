@@ -15,8 +15,11 @@ public class BranchAtom : Atom {
 	
 	public override List<Atom> Produce(Environment environment) {
 		List<Atom> production = new List<Atom>();
-		
-		List<RoadAtom> roads = environment.Rule.SpawnRoads(this, environment);
+
+		float x = Creator != null ? Creator.Node.X : 0f;
+		float z = Creator != null ? Creator.Node.Y : 0f;
+		Rule rule = environment.RuleAtCoordinates(x, z);
+		List<RoadAtom> roads = rule.SpawnRoads(this, environment);
 		
 		// TODO: Check some additional local conditions before returning the result.
 		

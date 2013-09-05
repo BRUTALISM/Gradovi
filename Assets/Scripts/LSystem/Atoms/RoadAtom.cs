@@ -22,7 +22,8 @@ public class RoadAtom : Atom {
 		List<Atom> production = new List<Atom>();
 		
 		// Create a new map node
-		MapNode spawn = new MapNode(Node.position + forward * environment.Rule.CalculateRoadLength(this, environment));
+		Rule rule = environment.RuleAtCoordinates(Node.X, Node.Y);
+		MapNode spawn = new MapNode(Node.position + forward * rule.CalculateRoadLength(this, environment));
 		
 		// Fetch the spawned node's neighbours
 		List<MapNode> neighbours = environment.GetNeighbours(spawn, environment.neighboursSearchRadius);
