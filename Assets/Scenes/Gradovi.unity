@@ -191,6 +191,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acd91c38265cc4d6db4d874018f25df3, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   targetGenerations: 14
 --- !u!114 &905065694
 MonoBehaviour:
@@ -202,6 +203,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50206d2266b12405d97364d55b0f2ac1, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   radius: 800
   densityAtCenter: 100
   densityFalloff: 0
@@ -243,6 +245,7 @@ MonoBehaviour:
   m_EditorHideFlags: 1
   m_Script: {fileID: 12000, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
+  m_EditorClassIdentifier: 
   m_TerrainData: {fileID: 15600000, guid: bd947927be01f4a509fd8bcaae1c97d5, type: 2}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
