@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class RoadAtom : Atom {
-	/// <summary>
-	/// This property is used as a break flag. As soon as it goes below zero, the road atom stops producing.
-	/// </summary>
-	// FIXME: Implement.
-	public float DelayCount { get; set; }
-	
 	private Vector3 forward;
 	
 	public RoadAtom(Vector3 forward) : this(forward, null) {}
