@@ -53,6 +53,8 @@ public class CityGenerator : MonoBehaviour {
 	}
 	
 	private void UpdateInEditMode() {
+		if (actualGenerations > targetGenerations) Reset();
+
 		ProduceIfNecessary();
 		
 		// TODO: Check if the Y coordinate of the generator is 0, this has to be true at all times!
