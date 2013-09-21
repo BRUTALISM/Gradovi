@@ -30,18 +30,9 @@ public class CityGenerator : MonoBehaviour {
 	/// </summary>
 	public MapNode RootNode { get; private set; }
 	
-	// FIXME: Implement.
+	[SerializeField]
 	private Environment environment;
-	public Environment Environment {
-		get {
-			if (environment == null) {
-				environment = new Environment();
-				environment.origin = transform.position;
-				environment.populationDensity = GetComponent<PopulationDensity>();
-			}
-			return environment;
-		}
-	}
+	public Environment Environment { get { return environment; } }
 	
 	void Update() {
 		if (Application.isPlaying) {
@@ -53,7 +44,11 @@ public class CityGenerator : MonoBehaviour {
 	}
 	
 	private void UpdateInEditMode() {
-		if (actualGenerations > targetGenerations) Reset();
+		if (actualGenerations > targetGenerations) {
+			int rememberTargetGenerations = targetGenerations;
+			Reset();
+			targetGenerations = rememberTargetGenerations;
+		}
 
 		ProduceIfNecessary();
 		

@@ -6,10 +6,13 @@ using UnityEngine;
 /// Encapsulates data about the environment the city generator will be performing in. Things like terrain data,
 /// population density, etc.
 /// </summary>
+[Serializable]
 public class Environment {
-	// TODO: Make this class serializable and customizable from the editor.
-	
-	public Vector3 origin;
+	public Vector3 Origin {
+		get {
+			return populationDensity != null ? populationDensity.transform.position : Vector3.zero;
+		}
+	}
 	
 	private QuadTree<MapNode> mapNodeTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
 	public QuadTree<MapNode> MapNodeTree { get { return mapNodeTree; } }

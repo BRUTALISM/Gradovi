@@ -43,7 +43,7 @@ public class RadialRule : Rule {
 			// result into two groups:
 			//   - the vector is more aligned with the radius vector from the origin to the current node
 			//   - the vector is more aligned with the tangent of the circle which the radius vector defines
-			Vector3 radiusVector = currentAtom.Node.position - env.origin;
+			Vector3 radiusVector = currentAtom.Node.position - env.Origin;
 			Vector3 fromCreator = currentAtom.Node.position - currentAtom.Creator.Node.position;
 			
 			Vector3 tangent = Quaternion.Euler(0f, -90f, 0f) * radiusVector;
@@ -83,7 +83,7 @@ public class RadialRule : Rule {
 
 	public override float CalculateRoadLength(RoadAtom currentAtom, Environment env) {
 		// FIXME: Implement.
-		return Mathf.Min(20f + UnityEngine.Random.value * 10f + Vector3.Distance(env.origin, currentAtom.Node.position),
+		return Mathf.Min(20f + UnityEngine.Random.value * 10f + Vector3.Distance(env.Origin, currentAtom.Node.position),
 			env.maximumRoadLength);
 	}
 	

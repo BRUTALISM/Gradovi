@@ -192,7 +192,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd91c38265cc4d6db4d874018f25df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGenerations: 20
+  targetGenerations: 10
+  environment:
+    populationDensity: {fileID: 905065694}
+    neighboursSearchRadius: 50
+    nodeMergingMaximumDistance: 30
+    maximumRoadLength: 50
 --- !u!114 &905065694
 MonoBehaviour:
   m_ObjectHideFlags: 0
