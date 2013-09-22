@@ -55,7 +55,8 @@ public class Environment {
 	/// <param name="x">The x coordinate.</param>
 	/// <param name="z">The z coordinate.</param>
 	public Rule RuleAtCoordinates(float x, float z) {
-		if (Mathf.Sqrt(x * x + z * z) < 200f) return RectangularRule.Instance;
-		else return RadialRule.Instance;
+//		if (Mathf.Sqrt(x * x + z * z) < 200f) return RectangularRule.Instance;
+//		else return RadialRule.Instance;
+		return RadialRule.Instance;
 	}
 }

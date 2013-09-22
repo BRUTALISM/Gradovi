@@ -68,7 +68,7 @@ public class MapEdge {
 		if (Mathf.Approximately(w, 0f)) return null;
 		else if (Mathf.Approximately(CrossMag(q - p, r), 0f)) return null;
 		else {
-			float t = CrossMag(q - p,s) / w;
+			float t = CrossMag(q - p, s) / w;
 			Vector2 intersectionP = p + (t * r);
 			
 			// Check if the intersection lies within both line segments' bounds
@@ -82,7 +82,8 @@ public class MapEdge {
 			if (BoundsCheck(intersectionP, this.FromNode.PositionAsVector2, this.ToNode.PositionAsVector2) &&
 				BoundsCheck(intersectionP, other.FromNode.PositionAsVector2, other.ToNode.PositionAsVector2)) {
 				// Intersection found
-				return new MapNode(new Vector3(intersectionP.x, 0f, intersectionP.y));
+				float y = (FromNode.position + t * (ToNode.position - FromNode.position)).y;
+				return new MapNode(new Vector3(intersectionP.x, y, intersectionP.y));
 			}
 		}
 		

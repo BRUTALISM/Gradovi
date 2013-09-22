@@ -16,7 +16,8 @@ public class RectangularRule : Rule {
 	public override List<RoadAtom> SpawnRoads(BranchAtom currentAtom, Environment env) {
 		List<RoadAtom> production = new List<RoadAtom>();
 
-		// TODO: Temporary! Create roads shooting in all directions.
+		// TODO: Temporary!
+		// Create roads shooting in all directions.
 		production.Add(new RoadAtom(Vector3.forward, currentAtom.Node));
 		production.Add(new RoadAtom(Vector3.back, currentAtom.Node));
 		production.Add(new RoadAtom(Vector3.left, currentAtom.Node));

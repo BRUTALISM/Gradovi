@@ -91,12 +91,20 @@ public class CityGenerator : MonoBehaviour {
 			// Initialize the list
 			currentGeneration = new List<Atom>();
 			
-			// Add the axiom to the generation
+			// Create the axiom
 			// TODO: Add a configurable axiom
 			Atom axiom = new BranchAtom(null);
 			axiom.Node = new MapNode(transform.position);
 			RootNode = axiom.Node;
+
+			// Find out correct height for it
+			RaycastHit hit;
+			if (Physics.Raycast(transform.position + Vector3.up * 1000f, Vector3.down, out hit)) {
+				axiom.Node.position.y = hit.point.y + 0.1f;
+			}
+
 			currentGeneration.Add(axiom);
+
 			actualGenerations = 0;
 		}
 		
@@ -170,6 +178,8 @@ public class CityGenerator : MonoBehaviour {
 				}
 			}
 		}
+
+		Debug.Log("Number of nodes: " + intersections.Count);
 	}
 	
 	private void ClearCachedData() {

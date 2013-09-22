@@ -12,7 +12,8 @@ public class RadialRule : Rule {
 	}
 	
 	private RadialRule() {}
-	
+
+	// TODO: Move to Environment.
 	private const int MAX_ROADS = 3;
 	private const float MAX_ANGLE_FROM_CENTER = 30f;
 	

@@ -45,6 +45,18 @@ public class RoadAtom : Atom {
 				}
 			}
 		}
+
+		// Raycast to check for water
+		RaycastHit hit;
+		if (Physics.Raycast(spawn.position + Vector3.up * 1000f, Vector3.down, out hit)) {
+			if (hit.collider.gameObject.tag == "Water") {
+				// Spawned over water, skip this node
+				return production;
+			} else {
+				// Set the Y coordinate of the spawned node to match the height where the raycast hit
+				spawn.position.y = hit.point.y + 0.1f;
+			}
+		}
 		
 		if (!merged) {
 			// Add the newly created map node to the environment
@@ -65,9 +77,9 @@ public class RoadAtom : Atom {
 	}
 	
 	private bool Intersect(MapNode spawn, MapEdge spawnedEdge, List<MapNode> neighbours) {
-		// We'll need a list of all intersections we found for the given edge - in the general case there might be
+		// We'll need a set of all intersections we found for the given edge - in the general case there might be
 		// several intersections so we must find the one closest to the starting node (this.Node)
-		List<MapNode> intersectionNodes = null;
+		HashSet<MapNode> intersectionNodes = null;
 		
 		// TODO: Sort neighbours based on distance from spawn and intersect from closest to farthest.
 		
@@ -82,15 +94,15 @@ public class RoadAtom : Atom {
 					// Try to find an intersection
 					MapNode intersection = spawnedEdge.Intersection(neighboursEdge);
 					if (intersection != null) {
-						// We found an intersection, add it to the list
-						if (intersectionNodes == null) intersectionNodes = new List<MapNode>();
-						intersectionNodes.Add(intersection);
-						
-						// Also add the edge which generated the intersection to its edge list. Technically this is
+						// Found - add the edge which generated the intersection to its edge list. Technically this is
 						// invalid behavior (since the intersection lies somewhere *on* that edge), but it's only
 						// temporarily there until we reconnect the nodes and edges properly in the next part of the
 						// algorithm.
 						intersection.edges.Add(neighboursEdge);
+
+						// Add it to the set
+						if (intersectionNodes == null) intersectionNodes = new HashSet<MapNode>();
+						intersectionNodes.Add(intersection);
 					}
 				}
 			}
