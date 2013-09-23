@@ -18,9 +18,15 @@ public class Environment {
 	public QuadTree<MapNode> MapNodeTree { get { return mapNodeTree; } }
 	
 	public PopulationDensity populationDensity;
+
+	/// <summary>
+	/// The population density minimum. If the population is below this value at a given coordinate, nothing is
+	/// produced.
+	/// </summary>
+	public float populationDensityMinimum = 1f;
 	
 	/// <summary>
-	/// The radius within which a node has to be to be considered another node's neighbour.
+	/// The radius within which a node has to be considered another node's neighbour.
 	/// </summary>
 	public float neighboursSearchRadius = 50f;
 	

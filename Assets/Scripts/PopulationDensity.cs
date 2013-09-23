@@ -4,7 +4,6 @@ using System.Collections;
 public enum DensityFalloff {
 	Linear,
 	Quadratic,
-	Exponential
 }
 
 public class PopulationDensity : MonoBehaviour {
@@ -13,20 +12,19 @@ public class PopulationDensity : MonoBehaviour {
 	public DensityFalloff densityFalloff = DensityFalloff.Linear;
 	
 	void OnDrawGizmos() {
+		Gizmos.color = Color.green;
 		Gizmos.DrawWireSphere(transform.position, radius);
 	}
 	
 	public float DensityAt(Vector3 worldPosition) {
+		// 1f at center of population, 0f at the border, decreasing linearly
+		float distanceFactor = Mathf.Clamp(1f - (transform.position - worldPosition).magnitude / radius, 0f, 1f);
+
 		switch (densityFalloff) {
 		case DensityFalloff.Linear:
-			return Mathf.Clamp((transform.InverseTransformPoint(worldPosition) - transform.position).magnitude / radius, 0f, 1f) *
-				densityAtCenter;
+			return distanceFactor * densityAtCenter;
 		case DensityFalloff.Quadratic:
-			// FIXME: Implement.
-			return 1f;
-		case DensityFalloff.Exponential:
-			// FIXME: Implement.
-			return 1f;
+			return (distanceFactor * distanceFactor) * densityAtCenter;
 		default:
 			return 0f;
 		}

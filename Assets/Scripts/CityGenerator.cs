@@ -62,6 +62,12 @@ public class CityGenerator : MonoBehaviour {
 		// Go through atoms in the current generation and produce them all
 		List<Atom> nextGeneration = new List<Atom>();
 		foreach (Atom atom in currentGeneration) {
+			// Check if the area is populated enough
+			if (Environment.populationDensity.DensityAt(atom.Node.position) < Environment.populationDensityMinimum) {
+				continue;
+			}
+
+			// Produce the atom and add the product to the next gen
 			nextGeneration.AddRange(atom.Produce(Environment));
 		}
 		
@@ -129,8 +135,11 @@ public class CityGenerator : MonoBehaviour {
 		
 		// Draw all intersections
 		foreach (MapNode intersection in intersections) {
-//			Gizmos.color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+			Gizmos.color = Color.red;
 			Gizmos.DrawSphere(intersection.position, 3f);
+			Gizmos.color = Color.green;
+			Gizmos.DrawLine(intersection.position, intersection.position +
+			                Vector3.up * Environment.populationDensity.DensityAt(intersection.position));
 		}
 		
 		// Draw quadtrees from the environment
@@ -178,8 +187,6 @@ public class CityGenerator : MonoBehaviour {
 				}
 			}
 		}
-
-		Debug.Log("Number of nodes: " + intersections.Count);
 	}
 	
 	private void ClearCachedData() {
