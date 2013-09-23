@@ -196,9 +196,10 @@ MonoBehaviour:
   environment:
     populationDensity: {fileID: 905065694}
     populationDensityMinimum: 1
-    neighboursSearchRadius: 50
-    nodeMergingMaximumDistance: 30
-    maximumRoadLength: 50
+    neighboursSearchRadius: 25
+    nodeMergingMaximumDistance: 20
+    minimumRoadLength: 21
+    maximumRoadLength: 60
 --- !u!114 &905065694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50206d2266b12405d97364d55b0f2ac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 800
+  radius: 1000
   densityAtCenter: 100
   densityFalloff: 1
 --- !u!1 &965137829

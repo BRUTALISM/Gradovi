@@ -29,4 +29,8 @@ public class PopulationDensity : MonoBehaviour {
 			return 0f;
 		}
 	}
+
+	public float NormalizedDensityAt(Vector3 worldPosition) {
+		return Mathf.Clamp01(DensityAt(worldPosition) / densityAtCenter);
+	}
 }

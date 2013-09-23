@@ -34,6 +34,13 @@ public class Environment {
 	/// The distance between two nodes below which the nodes will be merged into one (while preserving edges).
 	/// </summary>
 	public float nodeMergingMaximumDistance = 30f;
+
+	/// <summary>
+	/// The minimum length of the generated roads. Note that roads might be shorter than this value if an intersection
+	/// occurs. This variable only controls the minimum length of the roads as they exit the production, before the
+	/// intersection algorithm runs.
+	/// </summary>
+	public float minimumRoadLength = 5f;
 	
 	/// <summary>
 	/// The maximum length of generated roads. Keep this value under <c>neighboursSearchRadius</c> if you want proper
@@ -64,5 +71,19 @@ public class Environment {
 //		if (Mathf.Sqrt(x * x + z * z) < 200f) return RectangularRule.Instance;
 //		else return RadialRule.Instance;
 		return RadialRule.Instance;
+	}
+
+	public float ElevationAt(float x, float z) {
+		RaycastHit hit;
+		if (Physics.Raycast(new Vector3(x, 1000f, z), Vector3.down, out hit)) {
+			return hit.point.y;
+		}
+
+		return 0f;
+	}
+
+	public float SlopeAt(float x, float z) {
+		// FIXME: Implement. Should return the slope coefficient of the terrain at the given point. (Raycast, normal, ...)
+		return 0f;
 	}
 }

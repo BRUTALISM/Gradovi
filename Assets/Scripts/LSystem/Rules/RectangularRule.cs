@@ -25,10 +25,4 @@ public class RectangularRule : Rule {
 
 		return production;
 	}
-
-	public override float CalculateRoadLength(RoadAtom currentAtom, Environment env) {
-		// FIXME: Implement.
-		return Mathf.Min(20f + UnityEngine.Random.value * 10f + Vector3.Distance(env.Origin, currentAtom.Node.position),
-		                 env.maximumRoadLength);
-	}
 }

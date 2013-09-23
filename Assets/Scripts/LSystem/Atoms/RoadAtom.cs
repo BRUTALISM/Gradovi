@@ -50,7 +50,10 @@ public class RoadAtom : Atom {
 		RaycastHit hit;
 		if (Physics.Raycast(spawn.position + Vector3.up * 1000f, Vector3.down, out hit)) {
 			if (hit.collider.gameObject.tag == "Water") {
-				// Spawned over water, skip this node
+				// Spawned over water, remove the edge from the starting node
+				Node.edges.Remove(spawnedEdge);
+
+				// Skip this node
 				return production;
 			} else {
 				// Set the Y coordinate of the spawned node to match the height where the raycast hit
