@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BranchAtom : Atom {
 	/// <summary>
-	/// The atom that created athis branch atom.
+	/// The atom that created this branch atom.
 	/// </summary>
 	// FIXME: Implement. Use this to find out the orientation of the road that created this instance.
 	public Atom Creator { get; set; }

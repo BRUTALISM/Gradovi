@@ -26,4 +26,8 @@ public class MapNode : ICoordinate2D {
 	public float Distance(MapNode other) {
 		return Vector3.Distance(this.position, other.position);
 	}
+
+	public override string ToString() {
+		return string.Format("[MapNode: PositionAsVector2={0}, X={1}, Y={2}]", PositionAsVector2, X, Y);
+	}
 }

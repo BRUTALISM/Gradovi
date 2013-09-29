@@ -22,46 +22,46 @@ public class RoadAtom : Atom {
 		// Fetch the spawned node's neighbours
 		List<MapNode> neighbours = environment.GetNeighbours(spawn, environment.neighboursSearchRadius);
 		
-		// Create a map edge between the current map node and the newly spawned node
-		MapEdge spawnedEdge = new MapEdge(Node, spawn);
-		
-		// Perform the intersection of the spawned node's edge against the neighbours' edges
-		bool intersected = Intersect(spawn, spawnedEdge, neighbours);
-		
+		// Check if the node is close to one of its neighbours so that they can be merged into one node
 		bool merged = false;
-		if (!intersected) {
-			// Check if the node is close to one of its neighbours so that they can be merged into one node
-			foreach (MapNode neighbour in neighbours) {
-				if (Vector3.Distance(spawn.position, neighbour.position) <= environment.nodeMergingMaximumDistance) {
-					// The spawned node will be merged with the neighbour, modify spawnedEdge's ToNode to point to it
-					spawnedEdge.ToNode = neighbour;
-					
-					// Let's not forget to update the neighbour's edge list
-					neighbour.edges.Add(spawnedEdge);
-					
-					// Stop iterating
-					merged = true;
-					break;
-				}
+		Vector2 spawnPosition = spawn.PositionAsVector2;
+		foreach (MapNode neighbour in neighbours) {
+			// Convert coords to 2D, we don't want elevation messing around with our merging algorithm
+			Vector2 neighbourPosition = neighbour.PositionAsVector2;
+
+			// Check for proximity
+			if (Vector2.Distance(spawnPosition, neighbourPosition) <= environment.nodeMergingMaximumDistance) {
+				// The neighbour merges
+				spawn = neighbour;
+
+				// Stop iterating
+				merged = true;
+				break;
 			}
 		}
 
-		// Raycast to check for water
-		RaycastHit hit;
-		if (Physics.Raycast(spawn.position + Vector3.up * 1000f, Vector3.down, out hit)) {
-			if (hit.collider.gameObject.tag == "Water") {
-				// Spawned over water, remove the edge from the starting node
-				Node.edges.Remove(spawnedEdge);
+		// Create a map edge between the current map node and the spawn
+		MapEdge spawnedEdge = new MapEdge(Node, spawn);
 
-				// Skip this node
-				return production;
-			} else {
+		if (!merged) {
+			// Perform the intersection of the spawned node's edge against the neighbours' edges
+			bool intersected = Intersect(spawn, spawnedEdge, neighbours);
+			
+			// Raycast to check for water
+			RaycastHit hit;
+			if (Physics.Raycast(spawn.position + Vector3.up * 1000f, Vector3.down, out hit)) {
+				if (hit.collider.gameObject.tag == "Water") {
+					// Spawned over water, remove the edge from the starting node
+					Node.edges.Remove(spawnedEdge);
+					
+					// Skip this node
+					return production;
+				}
+
 				// Set the Y coordinate of the spawned node to match the height where the raycast hit
 				spawn.position.y = hit.point.y + 0.1f;
 			}
-		}
-		
-		if (!merged) {
+
 			// Add the newly created map node to the environment
 			environment.AddMapNode(spawn);
 			
@@ -75,7 +75,7 @@ public class RoadAtom : Atom {
 				production.Add(branch);
 			}
 		}
-		
+
 		return production;
 	}
 	

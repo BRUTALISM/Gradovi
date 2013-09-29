@@ -35,8 +35,8 @@ public class MapEdge {
 		FromNode = fromNode;
 		ToNode = toNode;
 		
-		fromNode.edges.Add (this);
-		toNode.edges.Add (this);
+		fromNode.edges.Add(this);
+		toNode.edges.Add(this);
 	}
 	
 	/// <summary>
