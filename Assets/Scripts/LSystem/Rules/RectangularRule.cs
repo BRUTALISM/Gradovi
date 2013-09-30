@@ -21,14 +21,18 @@ public class RectangularRule : Rule {
 			MapNode toNode = currentAtom.Node;
 			MapNode fromNode = currentAtom.Node.edges[0].FromNode;
 			Vector3 parentDirection = (toNode.position - fromNode.position).normalized;
+
+			// Get the elevation at the current point
+			float currentElevation = env.ElevationAt(currentAtom.Node.X, currentAtom.Node.Y);
 			
 			// Create three roads: left, right and straight with regard to the "parent" road's direction
 			float[] angles = new float[] { -90f, 0f, 90f };
 			foreach (float angle in angles) {
-				// Rotate the direction vector
+				// Rotate the direction vector to get the direction we'll probe in
 				Vector3 roadDirection = Quaternion.Euler(0f, angle, 0f) * parentDirection;
-				
-				// TODO: Probe and possibly rotate the direction further, based on terrain and population density.
+
+				// Probe elevations around the given direction and get the direction of the road which is least steep
+				roadDirection = LeastSteepDirection(currentAtom.Node.position, roadDirection, currentElevation, env);
 				
 				// Create a new RoadAtom with the given road direction
 				RoadAtom roadAtom = new RoadAtom(roadDirection, currentAtom.Node);

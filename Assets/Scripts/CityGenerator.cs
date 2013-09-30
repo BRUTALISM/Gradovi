@@ -135,11 +135,11 @@ public class CityGenerator : MonoBehaviour {
 		
 		// Draw all intersections
 		foreach (MapNode intersection in intersections) {
-			Gizmos.color = Color.red;
+//			Gizmos.color = Color.red;
 			Gizmos.DrawSphere(intersection.position, 1f);
-			Gizmos.color = Color.green;
-			Gizmos.DrawLine(intersection.position, intersection.position +
-			                Vector3.up * Environment.populationDensity.DensityAt(intersection.position));
+//			Gizmos.color = Color.green;
+//			Gizmos.DrawLine(intersection.position, intersection.position +
+//			                Vector3.up * Environment.populationDensity.DensityAt(intersection.position));
 		}
 		
 		// Draw quadtrees from the environment

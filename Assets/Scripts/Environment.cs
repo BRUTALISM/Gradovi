@@ -54,7 +54,7 @@ public class Environment {
 	/// The maximum angle roads can deviate from the "perfect" route (the one which the production system would produce
 	/// if there weren't any limiting factors such as water, steep hills, etc).
 	/// </summary>
-	public float maximumRoadDeviationDegrees = 45f;
+	public float maximumRoadDeviationDegrees = 30f;
 	
 	public void AddMapNode(MapNode node) {
 		mapNodeTree = mapNodeTree.Add(node);

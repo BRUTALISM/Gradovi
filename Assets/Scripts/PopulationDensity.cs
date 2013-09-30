@@ -11,11 +11,6 @@ public class PopulationDensity : MonoBehaviour {
 	public float densityAtCenter = 100;
 	public DensityFalloff densityFalloff = DensityFalloff.Linear;
 	
-	void OnDrawGizmos() {
-		Gizmos.color = Color.green;
-		Gizmos.DrawWireSphere(transform.position, radius);
-	}
-	
 	public float DensityAt(Vector3 worldPosition) {
 		// 1f at center of population, 0f at the border, decreasing linearly
 		float distanceFactor = Mathf.Clamp(1f - (transform.position - worldPosition).magnitude / radius, 0f, 1f);

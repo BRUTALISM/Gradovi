@@ -26,15 +26,16 @@ public abstract class Rule {
 	/// the angle between the leftmost (and rightmost) vector and the direction vector is exactly <paramref name="env"/>
 	/// .maximumRoadDeviationDegrees. The length of each probe is <paramref name="env"/>.minimumRoadLength.
 	/// </summary>
-	/// <returns>The float.</returns>
+	/// <returns>The array of (Vector3, float) pairs representing the coordinate of each probe and the probed value,
+	/// respectively.</returns>
 	/// <param name="worldPosition">World position.</param>
 	/// <param name="direction">Direction.</param>
 	/// <param name="env">Env.</param>
 	/// <param name="prober">Prober.</param>
 	/// <param name="numberOfProbes">Number of probes.</param>
-	protected float[] ProbeFloat(Vector3 worldPosition, Vector3 direction, Environment env, FloatProber prober,
-	                             int numberOfProbes = NumberOfProbes) {
-		float[] probedValues = new float[numberOfProbes];
+	protected KeyValuePair<Vector3, float>[] ProbeFloat(Vector3 worldPosition, Vector3 direction, Environment env,
+	                                                    FloatProber prober, int numberOfProbes = NumberOfProbes) {
+		KeyValuePair<Vector3, float>[] probedValues = new KeyValuePair<Vector3, float>[numberOfProbes];
 
 		float angleIncrement = env.maximumRoadDeviationDegrees / (numberOfProbes / 2);
 		for (int i = 0, angleIndex = - numberOfProbes / 2; i < numberOfProbes; i++, angleIndex++) {
@@ -48,7 +49,7 @@ public abstract class Rule {
 			Vector3 probePosition = worldPosition + probeDirection * env.minimumRoadLength;
 
 			// Now probe
-			probedValues[i] = prober(env, probePosition);
+			probedValues[i] = new KeyValuePair<Vector3, float>(probePosition, prober(env, probePosition));
 		}
 
 		return probedValues;
@@ -60,5 +61,32 @@ public abstract class Rule {
 
 	public static float DensityProber(Environment env, Vector3 position) {
 		return env.populationDensity.DensityAt(position);
+	}
+
+	/// <summary>
+	/// Returns the direction of the least steep road among all probed roads.
+	/// </summary>
+	/// <returns>The direction of the road.</returns>
+	/// <param name="position">Position.</param>
+	/// <param name="roadDirection">Road direction.</param>
+	/// <param name="currentElevation">Current elevation.</param>
+	/// <param name="env">Environment.</param>
+	protected Vector3 LeastSteepDirection(Vector3 position, Vector3 roadDirection, float currentElevation,
+	                                      Environment env) {
+		// Probe elevations around the given direction
+		KeyValuePair<Vector3, float>[] elevationPairs = ProbeFloat(position, roadDirection, env, ElevationProber);
+
+		// Find the location which has a minimum elevation difference relative to the current node's position
+		KeyValuePair<Vector3, float> minimumPair;
+		float minimumElevationDelta = float.MaxValue;
+		foreach (KeyValuePair<Vector3, float> elevationPair in elevationPairs) {
+			if (Mathf.Abs(currentElevation - elevationPair.Value) < minimumElevationDelta) {
+				minimumElevationDelta = Mathf.Abs(currentElevation - elevationPair.Value);
+				minimumPair = elevationPair;
+			}
+		}
+
+		// We have the end location of the least steep road, now make it into a direction
+		return (minimumPair.Key - position).normalized;
 	}
 }

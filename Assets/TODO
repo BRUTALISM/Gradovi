@@ -1,7 +1,5 @@
-- ispravno generisanje RectangularRule-a: ulice treba da idu u odnosu na roditeljski node i da im pravac varira po nekoliko stepeni u stranu u zavisnosti od terena
-	- pogledaj "rectangular raster" u whitepaper-u, ne treba da budu simetricne ulice vec kvazirandom, ali i dalje pod pravim uglom
+- duzina ulica treba da uzima u obzir i nagib - sto je veci nagib, kraca je ulica
 - ispravno generisanje RadialRule-a: mora stvarno da bude radijalno, da ulice idu ili ka centru, ili direktno od njega, sa par stepeni odstupanja
-+ "par stepeni odstupanja" moze da bude parametar u Environment klasi i da se uzima u obzir kod svih pravila
 - gustina naseljenosti bi verovatno bilo najzgodnije da se cita iz bitmape. kul je sve ovo sa cirkularnom gustinom pa razlicite f-je opadanja kurac palac, ali i dalje je suvise lejm
 - bitmapa za blendovanje izmedju pravila
 	- bilo bi kul da se cvorovi i grane (tj. njihovi gizmoi) farbaju bojom pravila koje ih je generisalo (npr. rectangular roze, radial crveno)
