@@ -23,7 +23,7 @@ public class RectangularRule : Rule {
 			Vector3 parentDirection = (toNode.position - fromNode.position).normalized;
 
 			// Get the elevation at the current point
-			float currentElevation = env.ElevationAt(currentAtom.Node.X, currentAtom.Node.Y);
+			float currentElevation = env.ElevationAt(currentAtom.Node.position);
 			
 			// Create three roads: left, right and straight with regard to the "parent" road's direction
 			float[] angles = new float[] { -90f, 0f, 90f };

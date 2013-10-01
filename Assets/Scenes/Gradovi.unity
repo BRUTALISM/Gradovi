@@ -196,11 +196,12 @@ MonoBehaviour:
   environment:
     populationDensity: {fileID: 905065694}
     populationDensityMinimum: 1
-    neighboursSearchRadius: 61
+    neighboursSearchRadius: 50
     nodeMergingMaximumDistance: 10
     minimumRoadLength: 11
     maximumRoadLength: 100
-    maximumRoadDeviationDegrees: 10
+    maximumRoadDeviationDegrees: 2
+    slopeExaggeration: 5
 --- !u!114 &905065694
 MonoBehaviour:
   m_ObjectHideFlags: 0

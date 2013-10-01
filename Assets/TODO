@@ -1,4 +1,3 @@
-- duzina ulica treba da uzima u obzir i nagib - sto je veci nagib, kraca je ulica
 - ispravno generisanje RadialRule-a: mora stvarno da bude radijalno, da ulice idu ili ka centru, ili direktno od njega, sa par stepeni odstupanja
 - gustina naseljenosti bi verovatno bilo najzgodnije da se cita iz bitmape. kul je sve ovo sa cirkularnom gustinom pa razlicite f-je opadanja kurac palac, ali i dalje je suvise lejm
 - bitmapa za blendovanje izmedju pravila

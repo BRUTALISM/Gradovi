@@ -18,7 +18,7 @@ public class BranchAtom : Atom {
 
 		float x = Creator != null ? Creator.Node.X : 0f;
 		float z = Creator != null ? Creator.Node.Y : 0f;
-		Rule rule = environment.RuleAtCoordinates(x, z);
+		Rule rule = environment.RuleAtCoordinates(new Vector3(x, 0f, z));
 		List<RoadAtom> roads = rule.SpawnRoads(this, environment);
 		
 		// TODO: Check some additional local conditions before returning the result.

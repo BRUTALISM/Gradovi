@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RoadAtom : Atom {
 	private Vector3 forward;
+	public Vector3 Forward { get { return forward; } }
 	
 	public RoadAtom(Vector3 forward) : this(forward, null) {}
 	
@@ -16,7 +17,7 @@ public class RoadAtom : Atom {
 		List<Atom> production = new List<Atom>();
 		
 		// Create a new map node
-		Rule rule = environment.RuleAtCoordinates(Node.X, Node.Y);
+		Rule rule = environment.RuleAtCoordinates(Node.position);
 		MapNode spawn = new MapNode(Node.position + forward * rule.CalculateRoadLength(this, environment));
 		
 		// Fetch the spawned node's neighbours

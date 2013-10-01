@@ -55,6 +55,12 @@ public class Environment {
 	/// if there weren't any limiting factors such as water, steep hills, etc).
 	/// </summary>
 	public float maximumRoadDeviationDegrees = 30f;
+
+	/// <summary>
+	/// How much the slope of the road influences its length. See the <see cref="Rule"/> class'
+	/// <see cref="CalculateRoadLength"/> method for details. Tweak until satisfied.
+	/// </summary>
+	public float slopeExaggeration = 5f;
 	
 	public void AddMapNode(MapNode node) {
 		mapNodeTree = mapNodeTree.Add(node);
@@ -73,11 +79,8 @@ public class Environment {
 	/// Gets the rule which should be used to continue producing the L-system at the given coordinates.
 	/// </summary>
 	/// <returns>The rule at given coordinates.</returns>
-	/// <param name="x">The x coordinate.</param>
-	/// <param name="z">The z coordinate.</param>
-	public Rule RuleAtCoordinates(float x, float z) {
-//		if (Mathf.Sqrt(x * x + z * z) < 200f) return RectangularRule.Instance;
-//		else return RadialRule.Instance;
+	/// <param name="position">The position.</param>
+	public Rule RuleAtCoordinates(Vector3 position) {
 		// FIXME: Implement. Read rule switching information from a bitmap.
 		return RectangularRule.Instance;
 	}
@@ -86,11 +89,10 @@ public class Environment {
 	/// Returns terrain elevation at the given x and z coordinates.
 	/// </summary>
 	/// <returns>The <see cref="System.Single"/>The elevation.</returns>
-	/// <param name="x">The x coordinate.</param>
-	/// <param name="z">The z coordinate.</param>
-	public float ElevationAt(float x, float z) {
+	/// <param name="position">The position.</param>
+	public float ElevationAt(Vector3 position) {
 		RaycastHit hit;
-		if (Physics.Raycast(new Vector3(x, 1000f, z), Vector3.down, out hit)) {
+		if (Physics.Raycast(new Vector3(position.x, 1000f, position.z), Vector3.down, out hit)) {
 			return hit.point.y;
 		}
 
@@ -102,11 +104,10 @@ public class Environment {
 	/// being completely flat and 1f being completely vertical.
 	/// </summary>
 	/// <returns>The <see cref="System.Single"/>The slope percentage.</returns>
-	/// <param name="x">The x coordinate.</param>
-	/// <param name="z">The z coordinate.</param>
-	public float SlopePercentageAt(float x, float z) {
+	/// <param name="position">The position.</param>
+	public float SlopePercentageAt(Vector3 position) {
 		RaycastHit hit;
-		if (Physics.Raycast(new Vector3(x, 1000f, z), Vector3.down, out hit)) {
+		if (Physics.Raycast(new Vector3(position.x, 1000f, position.z), Vector3.down, out hit)) {
 			return Mathf.Abs(Vector3.Dot(hit.normal.normalized, Vector3.up));
 		}
 

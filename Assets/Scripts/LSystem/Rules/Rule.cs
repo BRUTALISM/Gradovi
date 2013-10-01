@@ -2,17 +2,49 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Base class for all L-system production rules.
+/// </summary>
 public abstract class Rule {
 	public delegate float FloatProber(Environment env, Vector3 position);
 
+	/// <summary>
+	/// The default number of probes for the probing algorithm.
+	/// </summary>
 	protected const int NumberOfProbes = 5;
 
 	public Rule() {}
-	
+
+	/// <summary>
+	/// Spawns the roads for the given branch atom. Each branch atom invokes this method during its production in order
+	/// to calculate the roads which will be spawned from it.
+	/// </summary>
+	/// <returns>The roads.</returns>
+	/// <param name="currentAtom">Current atom.</param>
+	/// <param name="env">Environment.</param>
 	public abstract List<RoadAtom> SpawnRoads(BranchAtom currentAtom, Environment env);
-	
+
+	/// <summary>
+	/// Calculates the length of the road for the given atom, taking its position and environment into account. This
+	/// method is invoked by each <see cref="RoadAtom"/> during its production, in order to find out its length.
+	/// </summary>
+	/// <returns>The road length.</returns>
+	/// <param name="currentAtom">Current atom.</param>
+	/// <param name="env">Environment.</param>
 	public virtual float CalculateRoadLength(RoadAtom currentAtom, Environment env) {
-		float lengthFactor = 1f - env.populationDensity.NormalizedDensityAt(currentAtom.Node.position);
+		// Calculate how much the population density influences road length (the less population, the longer the road)
+		float populationLengthFactor = 1f - env.populationDensity.NormalizedDensityAt(currentAtom.Node.position);
+
+		// Calculate how much the slope of the road influences its length (the steeper, the shorter)
+		float elevationLengthFactor = Mathf.Abs(env.ElevationAt(currentAtom.Node.position) -
+		                                        env.ElevationAt(currentAtom.Node.position + currentAtom.Forward));
+		elevationLengthFactor = 1f - Mathf.Clamp01(env.slopeExaggeration * elevationLengthFactor);
+
+		// Multiply them to get the final length factor. Basically the elevation factor should only influence the
+		// population factor when the road is very steep, in other cases it should be close to 1.
+		float lengthFactor = populationLengthFactor * elevationLengthFactor;
+
+		// Calculate the road length
 		return env.minimumRoadLength + lengthFactor * (env.maximumRoadLength - env.minimumRoadLength);
 	}
 
@@ -55,10 +87,22 @@ public abstract class Rule {
 		return probedValues;
 	}
 
+	/// <summary>
+	/// The prober that probes for elevation at the given position.
+	/// </summary>
+	/// <returns>The elevation at the given position.</returns>
+	/// <param name="env">Environment.</param>
+	/// <param name="position">Position.</param>
 	public static float ElevationProber(Environment env, Vector3 position) {
-		return env.ElevationAt(position.x, position.z);
+		return env.ElevationAt(position);
 	}
 
+	/// <summary>
+	/// The prober that probes for population density at the given position.
+	/// </summary>
+	/// <returns>The population density at the given position.</returns>
+	/// <param name="env">Environment.</param>
+	/// <param name="position">Position.</param>
 	public static float DensityProber(Environment env, Vector3 position) {
 		return env.populationDensity.DensityAt(position);
 	}
