@@ -1,4 +1,4 @@
-- ispravno generisanje RadialRule-a: mora stvarno da bude radijalno, da ulice idu ili ka centru, ili direktno od njega, sa par stepeni odstupanja
-- gustina naseljenosti bi verovatno bilo najzgodnije da se cita iz bitmape. kul je sve ovo sa cirkularnom gustinom pa razlicite f-je opadanja kurac palac, ali i dalje je suvise lejm
-- bitmapa za blendovanje izmedju pravila
-	- bilo bi kul da se cvorovi i grane (tj. njihovi gizmoi) farbaju bojom pravila koje ih je generisalo (npr. rectangular roze, radial crveno)
+- fix RadialRule generation (sack the spiral)
+- read population density from a bitmap
+- use a bitmap to blend between different production rules
+	- nice to have: color gizmos differently based on which rule generated the given node
