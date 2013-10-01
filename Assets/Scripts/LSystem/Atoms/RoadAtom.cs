@@ -85,8 +85,6 @@ public class RoadAtom : Atom {
 		// several intersections so we must find the one closest to the starting node (this.Node)
 		HashSet<MapNode> intersectionNodes = null;
 		
-		// TODO: Sort neighbours based on distance from spawn and intersect from closest to farthest.
-		
 		// Iterate through all neighbours
 		foreach (MapNode neighbour in neighbours) {
 			foreach (MapEdge neighboursEdge in neighbour.edges) {
