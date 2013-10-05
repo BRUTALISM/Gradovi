@@ -8,6 +8,12 @@ using UnityEngine;
 /// </summary>
 [Serializable]
 public class Environment {
+	public enum RuleType {
+		Radial,
+		Rectangular,
+		Mixed
+	}
+
 	public Vector3 Origin {
 		get {
 			return populationDensity != null ? populationDensity.transform.position : Vector3.zero;
@@ -16,6 +22,11 @@ public class Environment {
 	
 	private QuadTree<MapNode> mapNodeTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
 	public QuadTree<MapNode> MapNodeTree { get { return mapNodeTree; } }
+
+	/// <summary>
+	/// The type of rule used to generate the map.
+	/// </summary>
+	public RuleType ruleType;
 	
 	public PopulationDensity populationDensity;
 
@@ -81,8 +92,16 @@ public class Environment {
 	/// <returns>The rule at given coordinates.</returns>
 	/// <param name="position">The position.</param>
 	public Rule RuleAtCoordinates(Vector3 position) {
-		// FIXME: Implement. Read rule switching information from a bitmap.
-		return RectangularRule.Instance;
+		switch (ruleType) {
+		case RuleType.Radial:
+			return RadialRule.Instance;
+		case RuleType.Rectangular:
+			return RectangularRule.Instance;
+		case RuleType.Mixed:
+			// FIXME: Implement. Read rule switching information from a bitmap.
+		default:
+			return RadialRule.Instance;
+		}
 	}
 
 	/// <summary>
