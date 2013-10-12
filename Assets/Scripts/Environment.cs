@@ -16,9 +16,12 @@ public class Environment {
 
 	public Vector3 Origin {
 		get {
-			return populationDensity != null ? populationDensity.transform.position : Vector3.zero;
+			return generator != null ? generator.transform.position : Vector3.zero;
 		}
 	}
+
+	[SerializeField]
+	private Transform generator;
 	
 	private QuadTree<MapNode> mapNodeTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
 	public QuadTree<MapNode> MapNodeTree { get { return mapNodeTree; } }
@@ -27,14 +30,23 @@ public class Environment {
 	/// The type of rule used to generate the map.
 	/// </summary>
 	public RuleType ruleType;
-	
-	public PopulationDensity populationDensity;
+
+	/// <summary>
+	/// The texture which represents the population density. White is densest, black is no population.
+	/// </summary>
+	public Texture2D populationDensity;
+
+	/// <summary>
+	/// How much is the population density texture stretched over the terrain. A value of 1 means that 1 pixel
+	/// represents 1 meter of terrain.
+	/// </summary>
+	public float populationDensityScale = 1f;
 
 	/// <summary>
 	/// The population density minimum. If the population is below this value at a given coordinate, nothing is
 	/// produced.
 	/// </summary>
-	public float populationDensityMinimum = 1f;
+	public float populationDensityMinimum = 0.01f;
 	
 	/// <summary>
 	/// The radius within which a node has to be considered another node's neighbour. Keep this value greater than
@@ -131,5 +143,25 @@ public class Environment {
 		}
 
 		return 0f;
+	}
+
+	public float DensityAt(Vector3 position) {
+		// If no population texture is set, just return max density
+		if (populationDensity == null) return 1f;
+
+		// Convert position to local coordinates
+		Vector3 localPosition = position - Origin;
+
+		// If the position exceeds the area of the population texture, assume no population
+		if (Mathf.Abs(localPosition.x) > populationDensityScale * populationDensity.width / 2 ||
+		    Mathf.Abs(localPosition.z) > populationDensityScale * populationDensity.height / 2) return 0f;
+
+		// Fetch the value of the pixel at the given coordinates, taking into account populationDensityScale
+		int x = Mathf.FloorToInt(populationDensity.width / 2 + (localPosition.x / populationDensityScale));
+		int z = Mathf.FloorToInt(populationDensity.height / 2 + (localPosition.z / populationDensityScale));
+		Color color = populationDensity.GetPixel(x, z);
+
+		// Average the colors, this is our density
+		return (color.r + color.g + color.b) / 3;
 	}
 }

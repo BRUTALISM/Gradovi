@@ -178,7 +178,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 905065691}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 368.923431, y: 0, z: -201.344849}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -193,11 +193,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd91c38265cc4d6db4d874018f25df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGenerations: 56
+  targetGenerations: 62
   environment:
-    ruleType: 0
-    populationDensity: {fileID: 905065694}
-    populationDensityMinimum: 1
+    generator: {fileID: 905065692}
+    ruleType: 1
+    populationDensity: {fileID: 2800000, guid: 1c43fee823dc04748908a23449874428, type: 3}
+    populationDensityScale: 3.57999992
+    populationDensityMinimum: .00999999978
     neighboursSearchRadius: 50
     nodeMergingMaximumDistance: 10
     minimumRoadLength: 11

@@ -63,7 +63,7 @@ public class CityGenerator : MonoBehaviour {
 		List<Atom> nextGeneration = new List<Atom>();
 		foreach (Atom atom in currentGeneration) {
 			// Check if the area is populated enough
-			if (Environment.populationDensity.DensityAt(atom.Node.position) < Environment.populationDensityMinimum) {
+			if (Environment.DensityAt(atom.Node.position) < Environment.populationDensityMinimum) {
 				continue;
 			}
 
@@ -140,6 +140,15 @@ public class CityGenerator : MonoBehaviour {
 //			Gizmos.color = Color.green;
 //			Gizmos.DrawLine(intersection.position, intersection.position +
 //			                Vector3.up * Environment.populationDensity.DensityAt(intersection.position));
+		}
+
+		if (environment.populationDensity != null) {
+			// Draw population texture bounds
+			const float height = 100f;
+			Vector3 size = new Vector3(environment.populationDensity.width * environment.populationDensityScale, height,
+			                           environment.populationDensity.height * environment.populationDensityScale);
+			Gizmos.color = Color.blue;
+			Gizmos.DrawWireCube(transform.position - Vector3.down * height / 2, size);
 		}
 		
 		// Draw quadtrees from the environment

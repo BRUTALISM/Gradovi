@@ -1,4 +1,5 @@
 - fix RadialRule generation (sack the spiral)
+- sack the Environment class, needless piece of shit (move everything to CityGenerator)
 - read population density from a bitmap
 - use a bitmap to blend between different production rules
 	- nice to have: color gizmos differently based on which rule generated the given node

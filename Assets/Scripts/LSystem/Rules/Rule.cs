@@ -33,7 +33,7 @@ public abstract class Rule {
 	/// <param name="env">Environment.</param>
 	public virtual float CalculateRoadLength(RoadAtom currentAtom, Environment env) {
 		// Calculate how much the population density influences road length (the less population, the longer the road)
-		float populationLengthFactor = 1f - env.populationDensity.NormalizedDensityAt(currentAtom.Node.position);
+		float populationLengthFactor = 1f - env.DensityAt(currentAtom.Node.position);
 
 		// Calculate how much the slope of the road influences its length (the steeper, the shorter)
 		float elevationLengthFactor = Mathf.Abs(env.ElevationAt(currentAtom.Node.position) -
@@ -104,7 +104,7 @@ public abstract class Rule {
 	/// <param name="env">Environment.</param>
 	/// <param name="position">Position.</param>
 	public static float DensityProber(Environment env, Vector3 position) {
-		return env.populationDensity.DensityAt(position);
+		return env.DensityAt(position);
 	}
 
 	/// <summary>
