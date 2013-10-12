@@ -13,19 +13,8 @@ public class CityGenerator : MonoBehaviour {
 	/// </summary>
 	public int targetGenerations;
 
-	public enum RuleType {
-		Radial,
-		Rectangular,
-		Mixed
-	}
-
 	private QuadTree<MapNode> mapNodeTree = new QuadTree<MapNode>(-500f, 500f, -500f, 500f);
 	public QuadTree<MapNode> MapNodeTree { get { return mapNodeTree; } }
-
-	/// <summary>
-	/// The type of rule used to generate the map.
-	/// </summary>
-	public RuleType ruleType;
 
 	/// <summary>
 	/// The texture which represents the population density. White is densest, black is no population.
@@ -80,6 +69,15 @@ public class CityGenerator : MonoBehaviour {
 	/// <see cref="CalculateRoadLength"/> method for details. Tweak until satisfied.
 	/// </summary>
 	public float slopeExaggeration = 5f;
+
+	/// <summary>
+	/// The rule switching threshold. If the population density at a given point is above the threshold, the rectangular
+	/// rule is used. If it is below, radial rule is used.
+	/// </summary>
+	public float ruleSwitchingThreshold = 0.5f;
+
+	public Color rectangularRuleColor = Color.red;
+	public Color radialRuleColor = Color.red;
 	
 	/// <summary>
 	/// How many generations this generator currently has produced. If this number is smaller than
@@ -158,16 +156,8 @@ public class CityGenerator : MonoBehaviour {
 	/// <returns>The rule at given coordinates.</returns>
 	/// <param name="position">The position.</param>
 	public Rule RuleAtCoordinates(Vector3 position) {
-		switch (ruleType) {
-			case RuleType.Radial:
-			return RadialRule.Instance;
-			case RuleType.Rectangular:
-			return RectangularRule.Instance;
-			case RuleType.Mixed:
-			// FIXME: Implement. Read rule switching information from a bitmap.
-			default:
-			return RadialRule.Instance;
-		}
+		if (DensityAt(position) < ruleSwitchingThreshold) return RadialRule.Instance;
+		else return RectangularRule.Instance;
 	}
 
 	/// <summary>
@@ -267,18 +257,17 @@ public class CityGenerator : MonoBehaviour {
 	
 	public void OnDrawGizmos() {
 		// Draw all roads
-		Gizmos.color = Color.red;
 		foreach (MapEdge road in roads) {
+			if (road.ruleType == Rule.Type.Rectangular) Gizmos.color = rectangularRuleColor;
+			else Gizmos.color = radialRuleColor;
 			Gizmos.DrawLine(road.FromNode.position, road.ToNode.position);
 		}
 		
 		// Draw all intersections
 		foreach (MapNode intersection in intersections) {
-//			Gizmos.color = Color.red;
+			if (intersection.ruleType == Rule.Type.Rectangular) Gizmos.color = rectangularRuleColor;
+			else Gizmos.color = radialRuleColor;
 			Gizmos.DrawSphere(intersection.position, 1f);
-//			Gizmos.color = Color.green;
-//			Gizmos.DrawLine(intersection.position, intersection.position +
-//			                Vector3.up * Environment.populationDensity.DensityAt(intersection.position));
 		}
 
 		if (populationDensity != null) {

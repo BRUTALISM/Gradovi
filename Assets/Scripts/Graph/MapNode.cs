@@ -9,6 +9,11 @@ using System.Collections.Generic;
 public class MapNode : ICoordinate2D {
 	public List<MapEdge> edges;
 	public Vector3 position;
+
+	/// <summary>
+	/// The type of rule that generated this node.
+	/// </summary>
+	public Rule.Type ruleType;
 	
 	public Vector2 PositionAsVector2 {
 		get { return new Vector2(position.x, position.z); }

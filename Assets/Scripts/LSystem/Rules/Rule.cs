@@ -6,6 +6,11 @@ using UnityEngine;
 /// Base class for all L-system production rules.
 /// </summary>
 public abstract class Rule {
+	public enum Type {
+		Radial,
+		Rectangular
+	}
+
 	public delegate float FloatProber(CityGenerator gen, Vector3 position);
 
 	/// <summary>

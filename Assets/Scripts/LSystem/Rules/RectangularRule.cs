@@ -35,17 +35,17 @@ public class RectangularRule : Rule {
 				roadDirection = LeastSteepDirection(currentAtom.Node.position, roadDirection, currentElevation, gen);
 				
 				// Create a new RoadAtom with the given road direction
-				RoadAtom roadAtom = new RoadAtom(roadDirection, currentAtom.Node);
+				RoadAtom roadAtom = new RoadAtom(roadDirection, currentAtom.Node, Rule.Type.Rectangular);
 				
 				// Add it to the production
 				production.Add(roadAtom);
 			}
 		} else {
 			// This is the axiom, just spawn roads in all directions
-			production.Add(new RoadAtom(Vector3.forward, currentAtom.Node));
-			production.Add(new RoadAtom(Vector3.back, currentAtom.Node));
-			production.Add(new RoadAtom(Vector3.left, currentAtom.Node));
-			production.Add(new RoadAtom(Vector3.right, currentAtom.Node));
+			production.Add(new RoadAtom(Vector3.forward, currentAtom.Node, Rule.Type.Rectangular));
+			production.Add(new RoadAtom(Vector3.back, currentAtom.Node, Rule.Type.Rectangular));
+			production.Add(new RoadAtom(Vector3.left, currentAtom.Node, Rule.Type.Rectangular));
+			production.Add(new RoadAtom(Vector3.right, currentAtom.Node, Rule.Type.Rectangular));
 		}
 
 		return production;

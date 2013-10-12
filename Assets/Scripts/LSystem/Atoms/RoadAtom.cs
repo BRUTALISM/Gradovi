@@ -5,12 +5,18 @@ using UnityEngine;
 public class RoadAtom : Atom {
 	private Vector3 forward;
 	public Vector3 Forward { get { return forward; } }
+
+	/// <summary>
+	/// The type of rule that created this road atom.
+	/// </summary>
+	public Rule.Type ruleType;
 	
-	public RoadAtom(Vector3 forward) : this(forward, null) {}
+	public RoadAtom(Vector3 forward) : this(forward, null, Rule.Type.Rectangular) {}
 	
-	public RoadAtom(Vector3 forward, MapNode node) {
+	public RoadAtom(Vector3 forward, MapNode node, Rule.Type ruleType) {
 		this.forward = forward.normalized;
 		this.Node = node;
+		this.ruleType = ruleType;
 	}
 
 	public override List<Atom> Produce(CityGenerator generator) {
@@ -19,6 +25,7 @@ public class RoadAtom : Atom {
 		// Create a new map node
 		Rule rule = generator.RuleAtCoordinates(Node.position);
 		MapNode spawn = new MapNode(Node.position + forward * rule.CalculateRoadLength(this, generator));
+		spawn.ruleType = ruleType;
 		
 		// Fetch the spawned node's neighbours
 		List<MapNode> neighbours = generator.GetNeighbours(spawn, generator.neighboursSearchRadius);

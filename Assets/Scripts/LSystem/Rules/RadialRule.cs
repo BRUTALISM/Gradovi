@@ -45,16 +45,16 @@ public class RadialRule : Rule {
 			
 			// For now, spawn roads in all three directions
 			// TODO: Temporary
-			production.Add(new RoadAtom(left, currentAtom.Node));
-			production.Add(new RoadAtom(straight, currentAtom.Node));
-			production.Add(new RoadAtom(right, currentAtom.Node));
+			production.Add(new RoadAtom(left, currentAtom.Node, Rule.Type.Radial));
+			production.Add(new RoadAtom(straight, currentAtom.Node, Rule.Type.Radial));
+			production.Add(new RoadAtom(right, currentAtom.Node, Rule.Type.Radial));
 		} else {
 			// There's no creator (which means this is the axiom node), so we'll create roads shooting in all directions
 			// TODO: Temporary
-			production.Add(new RoadAtom(Vector3.forward, currentAtom.Node));
-			production.Add(new RoadAtom(Vector3.back, currentAtom.Node));
-			production.Add(new RoadAtom(Vector3.left, currentAtom.Node));
-			production.Add(new RoadAtom(Vector3.right, currentAtom.Node));
+			production.Add(new RoadAtom(Vector3.forward, currentAtom.Node, Rule.Type.Radial));
+			production.Add(new RoadAtom(Vector3.back, currentAtom.Node, Rule.Type.Radial));
+			production.Add(new RoadAtom(Vector3.left, currentAtom.Node, Rule.Type.Radial));
+			production.Add(new RoadAtom(Vector3.right, currentAtom.Node, Rule.Type.Radial));
 		}
 		
 		return production;

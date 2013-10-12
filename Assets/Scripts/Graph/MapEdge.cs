@@ -16,6 +16,11 @@ public class MapEdge {
 	public MapNode FromNode { get; set; }
 
 	public MapNode ToNode { get; set; }
+
+	/// <summary>
+	/// The type of rule that created this edge.
+	/// </summary>
+	public Rule.Type ruleType;
 	
 	public float Length {
 		get { return Vector3.Distance (FromNode.position, ToNode.position); }
@@ -37,6 +42,8 @@ public class MapEdge {
 		
 		fromNode.edges.Add(this);
 		toNode.edges.Add(this);
+
+		ruleType = toNode.ruleType;
 	}
 	
 	/// <summary>
