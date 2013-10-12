@@ -10,35 +10,10 @@ public class RadialRule : Rule {
 			return instance;
 		}
 	}
-	
-	private RadialRule() {}
 
-	// TODO: Move to Environment.
-	private const int MAX_ROADS = 3;
-	private const float MAX_ANGLE_FROM_CENTER = 30f;
-	
 	public override List<RoadAtom> SpawnRoads(BranchAtom currentAtom, Environment env) {
 		List<RoadAtom> production = new List<RoadAtom>();
-		
-//		// TODO: Temporary
-//		int roadCount = (int) Mathf.Floor(UnityEngine.Random.value * MAX_ROADS) + 1;
-//		
-//		float angleIncrement = 2 * MAX_ANGLE_FROM_CENTER / roadCount;
-//		float angle = -MAX_ANGLE_FROM_CENTER;
-//		
-//		Vector3 fromCenter = currentAtom.Node.Position - env.origin;
-//		if (fromCenter == Vector3.zero) fromCenter = Vector3.forward;
-//		
-//		for (int i = 0; i < roadCount; i++) {
-//			Vector3 direction = Quaternion.Euler(0f, angle, 0f) * fromCenter;
-//			
-//			RoadAtom road = new RoadAtom(direction);
-//			road.Node = currentAtom.Node;
-//			production.Add(road);
-//			
-//			angle += angleIncrement;
-//		}
-		
+
 		if (currentAtom.Creator != null) {
 			// Determine the vector from the creator atom's position and the current node's position, and split the
 			// result into two groups:
@@ -52,8 +27,11 @@ public class RadialRule : Rule {
 			Vector3 left = (Quaternion.Euler(0f, -90f, 0f) * fromCreator).normalized;
 			Vector3 straight = fromCreator.normalized;
 			Vector3 right = (Quaternion.Euler(0f, 90f, 0f) * fromCreator).normalized;
-			
-			if (Mathf.Abs(Vector3.Angle(radiusVector, fromCreator)) < 45f) {
+
+			// Get the angle between the radius vector and the vector from the creator to the current node
+			// (Note: Vector3.Angle returns a value from 0f to 180f)
+			float angle = Vector3.Angle(radiusVector, fromCreator);
+			if (angle < 45f || angle > 135f) {
 				// The incoming orientation is more aligned with the radius vector
 				left = AlignVector(left, tangent);
 				straight = AlignVector(straight, radiusVector);
