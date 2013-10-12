@@ -162,7 +162,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 905065692}
   - 114: {fileID: 905065693}
-  - 114: {fileID: 905065694}
   - 114: {fileID: 905065695}
   m_Layer: 0
   m_Name: CityGenerator
@@ -178,7 +177,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 905065691}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 368.923431, y: 0, z: -201.344849}
+  m_LocalPosition: {x: 417.790039, y: 0, z: -146.226517}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -193,33 +192,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd91c38265cc4d6db4d874018f25df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGenerations: 62
-  environment:
-    generator: {fileID: 905065692}
-    ruleType: 1
-    populationDensity: {fileID: 2800000, guid: 1c43fee823dc04748908a23449874428, type: 3}
-    populationDensityScale: 3.57999992
-    populationDensityMinimum: .00999999978
-    neighboursSearchRadius: 50
-    nodeMergingMaximumDistance: 10
-    minimumRoadLength: 11
-    maximumRoadLength: 100
-    maximumRoadDeviationDegrees: 2
-    slopeExaggeration: 5
---- !u!114 &905065694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 905065691}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50206d2266b12405d97364d55b0f2ac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 1000
-  densityAtCenter: 100
-  densityFalloff: 1
+  targetGenerations: 30
+  ruleType: 1
+  populationDensity: {fileID: 2800000, guid: 1c43fee823dc04748908a23449874428, type: 3}
+  populationDensityScale: 3.83999991
+  populationDensityMinimum: .00999999978
+  neighboursSearchRadius: 50
+  nodeMergingMaximumDistance: 10
+  minimumRoadLength: 11
+  maximumRoadLength: 100
+  maximumRoadDeviationDegrees: 2
+  slopeExaggeration: 5
 --- !u!114 &905065695
 MonoBehaviour:
   m_ObjectHideFlags: 0

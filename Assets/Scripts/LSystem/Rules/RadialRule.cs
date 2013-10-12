@@ -11,7 +11,7 @@ public class RadialRule : Rule {
 		}
 	}
 
-	public override List<RoadAtom> SpawnRoads(BranchAtom currentAtom, Environment env) {
+	public override List<RoadAtom> SpawnRoads(BranchAtom currentAtom, CityGenerator gen) {
 		List<RoadAtom> production = new List<RoadAtom>();
 
 		if (currentAtom.Creator != null) {
@@ -19,7 +19,7 @@ public class RadialRule : Rule {
 			// result into two groups:
 			//   - the vector is more aligned with the radius vector from the origin to the current node
 			//   - the vector is more aligned with the tangent of the circle which the radius vector defines
-			Vector3 radiusVector = currentAtom.Node.position - env.Origin;
+			Vector3 radiusVector = currentAtom.Node.position - gen.transform.position;
 			Vector3 fromCreator = currentAtom.Node.position - currentAtom.Creator.Node.position;
 			
 			Vector3 tangent = Quaternion.Euler(0f, -90f, 0f) * radiusVector;

@@ -12,13 +12,13 @@ public class BranchAtom : Atom {
 		Creator = creator;
 	}
 	
-	public override List<Atom> Produce(Environment environment) {
+	public override List<Atom> Produce(CityGenerator generator) {
 		List<Atom> production = new List<Atom>();
 
 		float x = Creator != null ? Creator.Node.X : 0f;
 		float z = Creator != null ? Creator.Node.Y : 0f;
-		Rule rule = environment.RuleAtCoordinates(new Vector3(x, 0f, z));
-		List<RoadAtom> roads = rule.SpawnRoads(this, environment);
+		Rule rule = generator.RuleAtCoordinates(new Vector3(x, 0f, z));
+		List<RoadAtom> roads = rule.SpawnRoads(this, generator);
 
 		foreach (RoadAtom road in roads) production.Add(road);
 		return production;

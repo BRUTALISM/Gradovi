@@ -13,15 +13,15 @@ public class RoadAtom : Atom {
 		this.Node = node;
 	}
 
-	public override List<Atom> Produce(Environment environment) {
+	public override List<Atom> Produce(CityGenerator generator) {
 		List<Atom> production = new List<Atom>();
 		
 		// Create a new map node
-		Rule rule = environment.RuleAtCoordinates(Node.position);
-		MapNode spawn = new MapNode(Node.position + forward * rule.CalculateRoadLength(this, environment));
+		Rule rule = generator.RuleAtCoordinates(Node.position);
+		MapNode spawn = new MapNode(Node.position + forward * rule.CalculateRoadLength(this, generator));
 		
 		// Fetch the spawned node's neighbours
-		List<MapNode> neighbours = environment.GetNeighbours(spawn, environment.neighboursSearchRadius);
+		List<MapNode> neighbours = generator.GetNeighbours(spawn, generator.neighboursSearchRadius);
 		
 		// Check if the node is close to one of its neighbours so that they can be merged into one node
 		bool merged = false;
@@ -31,7 +31,7 @@ public class RoadAtom : Atom {
 			Vector2 neighbourPosition = neighbour.PositionAsVector2;
 
 			// Check for proximity
-			if (Vector2.Distance(spawnPosition, neighbourPosition) <= environment.nodeMergingMaximumDistance) {
+			if (Vector2.Distance(spawnPosition, neighbourPosition) <= generator.nodeMergingMaximumDistance) {
 				// The neighbour merges
 				spawn = neighbour;
 
@@ -64,7 +64,7 @@ public class RoadAtom : Atom {
 			}
 
 			// Add the newly created map node to the environment
-			environment.AddMapNode(spawn);
+			generator.AddMapNode(spawn);
 			
 			// Continue producing only if there were no intersections
 			if (!intersected) {

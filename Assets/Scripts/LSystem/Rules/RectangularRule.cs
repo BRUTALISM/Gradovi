@@ -13,7 +13,7 @@ public class RectangularRule : Rule {
 	
 	private RectangularRule() {}
 	
-	public override List<RoadAtom> SpawnRoads(BranchAtom currentAtom, Environment env) {
+	public override List<RoadAtom> SpawnRoads(BranchAtom currentAtom, CityGenerator gen) {
 		List<RoadAtom> production = new List<RoadAtom>();
 
 		if (currentAtom.Creator != null) {
@@ -23,7 +23,7 @@ public class RectangularRule : Rule {
 			Vector3 parentDirection = (toNode.position - fromNode.position).normalized;
 
 			// Get the elevation at the current point
-			float currentElevation = env.ElevationAt(currentAtom.Node.position);
+			float currentElevation = gen.ElevationAt(currentAtom.Node.position);
 			
 			// Create three roads: left, right and straight with regard to the "parent" road's direction
 			float[] angles = new float[] { -90f, 0f, 90f };
@@ -32,7 +32,7 @@ public class RectangularRule : Rule {
 				Vector3 roadDirection = Quaternion.Euler(0f, angle, 0f) * parentDirection;
 
 				// Probe elevations around the given direction and get the direction of the road which is least steep
-				roadDirection = LeastSteepDirection(currentAtom.Node.position, roadDirection, currentElevation, env);
+				roadDirection = LeastSteepDirection(currentAtom.Node.position, roadDirection, currentElevation, gen);
 				
 				// Create a new RoadAtom with the given road direction
 				RoadAtom roadAtom = new RoadAtom(roadDirection, currentAtom.Node);

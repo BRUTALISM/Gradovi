@@ -17,5 +17,5 @@ public abstract class Atom {
 	/// <returns>
 	/// A list of atoms for the next L-system generation.
 	/// </returns>
-	public abstract List<Atom> Produce(Environment environment);
+	public abstract List<Atom> Produce(CityGenerator generator);
 }
