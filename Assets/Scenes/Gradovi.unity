@@ -192,9 +192,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd91c38265cc4d6db4d874018f25df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGenerations: 60
+  targetGenerations: 80
   populationDensity: {fileID: 2800000, guid: 1c43fee823dc04748908a23449874428, type: 3}
-  populationDensityScale: 3.83999991
+  populationDensityScale: 4.46000004
   populationDensityMinimum: .00999999978
   neighboursSearchRadius: 50
   nodeMergingMaximumDistance: 10
@@ -204,7 +204,7 @@ MonoBehaviour:
   slopeExaggeration: 5
   ruleSwitchingThreshold: .5
   rectangularRuleColor: {r: 1, g: 0, b: 0, a: 1}
-  radialRuleColor: {r: 1, g: 0, b: .931034565, a: 1}
+  radialRuleColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &905065695
 MonoBehaviour:
   m_ObjectHideFlags: 0
