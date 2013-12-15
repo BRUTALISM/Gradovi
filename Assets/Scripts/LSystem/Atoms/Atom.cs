@@ -6,9 +6,6 @@ using System.Collections.Generic;
 /// each atom is produced into n atoms (n >= 0) according to its production rules.
 /// </summary>
 public abstract class Atom {
-	public Atom Left { get; set; }
-	public Atom Right { get; set; }
-	
 	public MapNode Node { get; set; }
 	
 	/// <summary>
